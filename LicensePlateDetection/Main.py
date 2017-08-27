@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
 import time
+import os
 from openalpr import Alpr
-from argparse import ArgumentParser
 
 # Create a VideoCapture object
 cap = cv2.VideoCapture('TestData/PL_LS_1.mp4')
@@ -45,3 +45,32 @@ while(True):
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
+
+alpr = Alpr("us", "openalpr.conf", "runtime_data")
+if not alpr.is_loaded():
+    print("Error loading OpenALPR")
+    #sys.exit(1)
+
+alpr.set_top_n(20)
+alpr.set_default_region("md")
+
+results = alpr.recognize_file("TestData/us-3.jpg")
+
+i = 0
+for plate in results['results']:
+    i += 1
+    print("Plate #%d" % i)
+    print("   %12s %12s" % ("Plate", "Confidence"))
+    for candidate in plate['candidates']:
+        prefix = "-"
+        if candidate['matches_template']:
+            prefix = "*"
+
+        print("  %s %12s%12f" % (prefix, candidate['plate'], candidate['confidence']))
+
+# Call when completely done to release memory
+alpr.unload()
+
+def TestFunction():
+    print ("Hello World")
+    return
