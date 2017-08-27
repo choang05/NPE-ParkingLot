@@ -2,182 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5beb3fd-9ae1-439f-b7b7-3b3c989ee030" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/.dockerignore" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/.travis.yml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/LICENSE.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/OpenALPR.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/README.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/alpr.exe" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/include/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/include/alpr.h" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/Main.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/Alpr.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/Alpr.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprCoordinate.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprCoordinate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprPlate.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprPlate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprPlateResult.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprPlateResult.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprRegionOfInterest.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprRegionOfInterest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprResults.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/AlprResults.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/CDL.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/Cookie.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/CookieList.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/HTTP.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/HTTPTokener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSON.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONArray.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONArray.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONException.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONML.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONObject$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONObject$Null.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONObject.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONObject.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONString.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONStringer.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONStringer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONTokener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONTokener.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/JSONWriter.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/Property.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/XML.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/XMLTokener.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java/com/openalpr/jni/json/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/java_test.bat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/liblept170.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr-net.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr-static.lib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr-utils-calibrate.exe" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr-utils-tagplates.exe" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalpr.lib" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalprjni.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalprnet-windemo.exe" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/openalprpy.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/opencv_ffmpeg300_64.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/opencv_world300.dll" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/python/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/python/setup.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/python/test.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/python_test.bat" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/cameras.yaml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/au.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/auwide.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/eu.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/gb.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/kr.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/kr2.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/mx.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/sg.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/config/us.conf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ak2008.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/al2002.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ar2006.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/az1996.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ca1993.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/co2000.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ct2000.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/dc2003.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/de1970.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/fl2004.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ga2007.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/hi1991.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ia1997.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/id2006.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/il2002.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/in2009.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ks2007b.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ky2005.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/la2006.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ma1987.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/md2006.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/md2006b.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/md2006c.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/me1999.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/me1999b.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/mi2007.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/mn2000.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/mo2006b.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/mo2009.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ms2003.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/mt2010.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/nc1982.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/nd1993.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ne2005.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/nh1999.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/nj1993.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/nm2010.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/nv2001.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ny2010.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/oh2004.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ok2009.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/or1990.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/pa2004.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ri1996.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/sc2008.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/sd2007.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/tn2007.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/tx2009.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/ut2009.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/va2003.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/vt1985.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/wa1998.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/wi2007.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/wv1995.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/keypoints/us/wy2000.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/lau.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/leu.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/lgb.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/lkr.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/lkr2.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/lsg.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/ocr/tessdata/lus.traineddata" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/au.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/eu.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/gb.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/kr.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/mx.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/readme.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/sg.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/postprocess/us.patterns" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/region/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/region/au.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/region/eu.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/region/kr2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/runtime_data/region/us.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/au-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/eu-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/eu-2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/eu-3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/eu-clip.mp4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/kr-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/us-1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/us-2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/us-3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/samples/us-4.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/vc_redist.x64.exe" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LicensePlateDetection/Main.py" afterPath="$PROJECT_DIR$/LicensePlateDetection/Main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LicensePlateDetection/openalpr.conf" afterPath="$PROJECT_DIR$/LicensePlateDetection/openalpr.conf" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -191,8 +18,8 @@
       <file leaf-file-name="Main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/LicensePlateDetection/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state relative-caret-position="289">
+              <caret line="48" column="27" lean-forward="false" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -208,13 +35,13 @@
       <list>
         <option value="$PROJECT_DIR$/LicensePlateDetection/python/test.py" />
         <option value="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/OpenALPR.py" />
-        <option value="$PROJECT_DIR$/LicensePlateDetection/Main.py" />
         <option value="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/Handler_OpenALPR.py" />
         <option value="$PROJECT_DIR$/LicensePlateDetection/OpenALPR/Main.py" />
+        <option value="$PROJECT_DIR$/LicensePlateDetection/Main.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="58" />
     <option name="y" value="-8" />
     <option name="width" value="1870" />
@@ -369,14 +196,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="58" y="-8" width="1870" height="1092" extended-state="0" />
+    <frame x="58" y="-8" width="1870" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24973032" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3299389" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286004" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -425,8 +252,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/LicensePlateDetection/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="289">
+          <caret line="48" column="27" lean-forward="false" selection-start-line="48" selection-start-column="27" selection-end-line="48" selection-end-column="27" />
           <folding />
         </state>
       </provider>
