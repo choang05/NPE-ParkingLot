@@ -4,6 +4,7 @@ import sys
 
 # Read the images
 image_main = cv2.imread('PL01.jpg')
+image_overlay = image_main.copy()
 
 image_masks = [cv2.imread('PL01_Slot1_mask.jpg', 0), 
                cv2.imread('PL01_Slot2_mask.jpg', 0), 
@@ -30,12 +31,6 @@ with tf.Session() as sess:
         #mask = cv2.imread(image_masks[index], 0)
         mask = image_masks[index]
         image_masked = cv2.bitwise_and(image_main, image_main, mask = mask)
-        
-        #   Draw contour around masks onto main image
-        #image_masked_gray = cv2.cvtColor(image_masked,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(image_masks[index], 127,255,0)
-        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        cv2.drawContours(image_main, contours, -1, (0,255,0), 10)
 
         cv2.imwrite('image_masked.jpg', image_masked)
 
@@ -50,12 +45,29 @@ with tf.Session() as sess:
         predictions = sess.run(softmax_tensor, {'DecodeJpeg/contents:0': image_data})
 
         # Sort to show labels of first prediction in order of confidence
-        top_k = predictions[0].argsort()[-len(predictions[0]):][::-1]
+        results = predictions[0].argsort()[-len(predictions[0]):][::-1]
         
-        for node_id in top_k:
-            human_string = label_lines[node_id]
-            score = predictions[0][node_id]
-            print('%s (score = %.5f)' % (human_string, score))
+        result_top = results[0]
+
+        human_string = label_lines[result_top]
+        score = predictions[0][result_top]
+        print('%s (score = %.5f)' % (human_string, score))
+
+        # for node_id in results:
+        #     human_string = label_lines[node_id]
+        #     score = predictions[0][node_id]
+        #     print('%s (score = %.5f)' % (human_string, score))
+
+        #   Draw contour around masks onto main image
+        #image_masked_gray = cv2.cvtColor(image_masked,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(image_masks[index], 127,255,0)
+        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+        #	Determine color of occupancy
+        if human_string == label_lines[0]:
+			cv2.drawContours(image_main, contours, -1, (255,0,0), -1)
+    	else:
+			cv2.drawContours(image_main, contours, -1, (0,255,0), -1)
 
 #   Shrink main image and display
 image_main_small = cv2.resize(image_main, (0,0), fx=0.25, fy=0.25) 
