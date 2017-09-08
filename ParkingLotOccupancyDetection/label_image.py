@@ -6,13 +6,13 @@ from PIL import Image
 import glob
 
 # Read the images
-image_original = cv2.imread('PL02.jpg')
+image_original = cv2.imread('PL01.jpg')
 image_overlay_result = image_original.copy()
 
 #   Fetch mask images and convert to array of cv2 image data
-image_masks = []
-for filename in glob.glob('Masks/*.jpg'):
-    image_masks.append(cv2.imread(filename, 0))
+image_masks = [cv2.imread('PL01_Slot1_mask.jpg', 0),
+               cv2.imread('PL01_Slot2_mask.jpg', 0),
+               cv2.imread('PL01_Slot3_mask.jpg', 0)]
 
 # Display masked image
 #cv2.imshow("Masked Image", image_masked)
@@ -53,9 +53,9 @@ with tf.Session() as sess:
 
         result_label = label_lines[result_top]
         result_score = predictions[0][result_top]
-        print ('Slot %s %s (score = %.5f)' % (index, result_label, result_score))
-        image_main_small = cv2.resize(image_masked, (600, 600), fx=1, fy=1) 
-        cv2.imshow('Slot ' + str(index), image_main_small)
+        #print ('Slot %s %s (score = %.5f)' % (index, result_label, result_score))
+        #image_main_small = cv2.resize(image_masked, (600, 600), fx=1, fy=1) 
+        #cv2.imshow('Slot ' + str(index), image_main_small)
 
         # for node_id in results:
         #     human_string = label_lines[node_id]
@@ -95,19 +95,19 @@ with tf.Session() as sess:
         #FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
         #FONT_HERSHEY_SCRIPT_COMPLEX = 7,
         #FONT_ITALIC = 16
-        #font = cv2.FONT_HERSHEY_SIMPLEX
-        #fontSize = .5
-        #textThickness = 1
-        #cv2.putText(image_overlay_result, "Occupancy: " + result_label, (centerX - 350, centerY), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)         
-        #cv2.putText(image_overlay_result, "Confidence: " + str(result_score*100)[:4 + (1-1)] + '%', (centerX - 350, centerY + textThickness * 10), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)          
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        fontSize = 2
+        textThickness = 3
+        cv2.putText(image_overlay_result, "Occupancy: " + result_label, (centerX - 350, centerY), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay_result, "Confidence: " + str(result_score*100)[:4 + (1-1)] + '%', (centerX - 350, centerY + textThickness * 20), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)          
 
         # apply the overlay with transparency, alpha
         alpha = 0.25
         cv2.addWeighted(image_overlay, alpha, image_overlay_result, 1 - alpha, 0, image_overlay_result)
 
     #   Shrink main image and display
-    image_main_small = cv2.resize(image_overlay_result, (600, 600), fx=1, fy=1) 
-    cv2.imshow("Result", image_main_small)
+    #image_main_small = cv2.resize(image_overlay_result, (0, 0), fx=.5, fy=.5) 
+    cv2.imshow("Result", image_overlay_result)
 
 #image_main = cv2.resize(image_original, (0,0), fx=0.25, fy=0.25) 
 #cv2.imshow("Result", image_main)
