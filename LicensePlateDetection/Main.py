@@ -15,7 +15,11 @@ from PIL import Image
 #   Variables
 #
 frameCaptureDelay = 5
-videoCaptureSource = 'ParkingLotOccupancyDetection/V_03.mp4'
+videoCaptureSource = 'ParkingLotOccupancyDetection/PL_Test01.mp4'
+maskImagesPath = 'ParkingLotOccupancyDetection/Masks004/*.jpg'
+
+testImageOnly = True
+testImagePath = 'ParkingLotOccupancyDetection/PL04.jpg'
 
 # Setup alpr
 #alpr = Alpr("us", "openalpr.conf", "runtime_data")
@@ -60,8 +64,11 @@ def CreateOverlay():
         mask = image_masks[index]
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
 
+        #   Resize
+        image_masked_resized = cv2.resize(image_masked, (299, 299), fx=1, fy=1) 
+
         #   Save image to be processed
-        cv2.imwrite('image_masked_current.jpg', image_masked)
+        cv2.imwrite('image_masked_current.jpg', image_masked_resized)
 
         # Read in the image_data
         image_data = tf.gfile.FastGFile('image_masked_current.jpg', 'rb').read()
@@ -130,8 +137,13 @@ def CreateOverlay():
         cv2.addWeighted(image_overlay, alpha, image_overlay_result, 1 - alpha, 0, image_overlay_result)
 
         #   Shrink main image and display
-        image_main_small = cv2.resize(image_overlay_result, (600, 600), fx=1, fy=1) 
+        image_main_small = cv2.resize(image_overlay_result, (750, 750), fx=1, fy=1) 
+        #   Save result image
+        cv2.imwrite('image_overlay_result.jpg', image_main_small)
+        #   Display image
         cv2.imshow("Result", image_main_small)
+
+
 
 def tryint(s):
     try:
@@ -193,7 +205,7 @@ def sort_nicely(l):
 
 #   Fetch mask images and convert to array of cv2 image data
 image_mask_files = []
-for filename in glob.glob('ParkingLotOccupancyDetection/Masks_03/*.jpg'):
+for filename in glob.glob(maskImagesPath):
     image_mask_files.append(filename)
 
 sort_nicely(image_mask_files)
@@ -233,34 +245,39 @@ _ = tf.import_graph_def(graph_def, name='')
 sess = tf.Session() 
 # Feed the image_data as input to the graph and get first prediction
 softmax_tensor = sess.graph.get_tensor_by_name('final_result:0')
-    
-while(True):
+ 
+if testImageOnly == True:
+    image = cv2.imread(testImagePath) 
+    cv2.imwrite("Frame.jpg", image) 
+    CreateOverlay()
+else:
+    while(True):
 
-    # Capture frame-by-frame
-    success, image = cap.read()
-    framecount += 1
+        # Capture frame-by-frame
+        success, image = cap.read()
+        framecount += 1
 
-    #   Draw image
-    cv2.imshow('image',image)
+        #   Draw image
+        cv2.imshow('image',image)
 
-    # Check if this is the frame closest to the delay seconds
-    if framecount == (framerate * frameCaptureDelay):
-        framecount = 0
+        # Check if this is the frame closest to the delay seconds
+        if framecount == (framerate * frameCaptureDelay):
+            framecount = 0
 
-        cv2.imwrite("Frame.jpg", image)
+            cv2.imwrite("Frame.jpg", image)
 
-        #   Create threads
-        #thread1 = threading.Thread(target=CaptureFrame, args=())
-        thread1 = threading.Thread(target=CreateOverlay, args=())
+            #   Create threads
+            #thread1 = threading.Thread(target=CaptureFrame, args=())
+            #thread1 = threading.Thread(target=CreateOverlay, args=())
+            CreateOverlay()
+            #thread1.start()
+            #thread1.join()
 
-        thread1.start()
-        #thread1.join()
+            #CreateOverlay()
 
-        #CreateOverlay()
-
-    # Check end of video
-    if cv2.waitKey(25) & 0xFF == ord('q'):
-        break
+        # Check end of video
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            break
 
 # Call when completely done to release memory
 #alpr.unload()
