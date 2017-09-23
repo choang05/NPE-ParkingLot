@@ -20,6 +20,12 @@ label_lines = ""
 ##   Functions
 ##    
 
+def RemoveOldMasks():
+    #   Remove any previous image masks in the masks folder
+    files = glob.glob('OccupancyDetection/MasksCurrent/*')
+    for f in files:
+        os.remove(f)
+
 def SetupTensorflow(labelsTxtFilePath, graphFilePath):
     # Loads label file, strips off carriage return
     global label_lines 
@@ -67,13 +73,16 @@ def Predict(image):
     image_overlay_result = image_original.copy()
 
     for index, element in enumerate(image_masks):
+        #   Create mask
         mask = image_masks[index]
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
 
+        #   Save image to be processed
+        savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.jpg'
+        cv2.imwrite(savedImageFile, image_masked)
+
         #   Resize
         image_masked_resized = cv2.resize(image_masked, (299, 299), fx=1, fy=1) 
-
-        #   Save image to be processed
         cv2.imwrite('image_masked_current.jpg', image_masked_resized)
 
         # Read in the image_data

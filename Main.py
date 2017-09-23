@@ -6,8 +6,10 @@ import glob
 import re
 import cv2
 import time
+import subprocess
 #from openalpr import Alpr
-from OccupancyDetection.OccupancyDetection import Predict, SetupMasks, SetupTensorflow
+from LicensePlateDetection.LicensePlateDetection import GetLicensePlateInfo
+from OccupancyDetection.OccupancyDetection import Predict, SetupMasks, SetupTensorflow, RemoveOldMasks
 from enum import Enum
 from math import floor
 from PIL import Image
@@ -21,11 +23,11 @@ class TestModes(Enum):
     Video = 2
     Stream = 3
 
-TestMode = TestModes.Stream
+TestMode = TestModes.Picture
 
 frameCaptureDelay = 5
 videoCaptureSource = 'OccupancyDetection/PL_Test01_repeat.mp4'
-testImagePath = 'OccupancyDetection/PL04.jpg'
+testImagePath = 'OccupancyDetection/PL00.jpg'
 videoStreamAddress = "http://10.0.0.131:8080/video"
 
 maskImagesPath = 'OccupancyDetection/Masks000/*.jpg'
@@ -42,6 +44,7 @@ graphFilePath = "OccupancyDetection/retrained_graph.pb"
 ##
 
 #   Initialize occupancy detection
+RemoveOldMasks()
 SetupMasks(maskImagesPath)
 SetupTensorflow(labelsTxtFilePath, graphFilePath)
 
@@ -116,6 +119,7 @@ elif TestMode == TestModes.Video:
 
         # Check end of video
         if cv2.waitKey(25) & 0xFF == ord('q'):
+            cap.release()
             break
 
 elif TestMode == TestModes.Stream: 
@@ -158,10 +162,12 @@ elif TestMode == TestModes.Stream:
         #CreateOverlay()
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
+            cap.release()
             break
 
 # Call when completely done to release memory
 #alpr.unload()
 #sess.close()
-cap.release()
 cv2.destroyAllWindows()
+
+GetLicensePlateInfo("C:\\Users\\chadh\\Downloads\\PL05_1.jpg")
