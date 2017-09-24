@@ -8,8 +8,8 @@ import cv2
 import time
 import subprocess
 #from openalpr import Alpr
-from LicensePlateDetection.LicensePlateDetection import GetLicensePlateInfo
-from OccupancyDetection.OccupancyDetection import Predict, SetupMasks, SetupTensorflow, RemoveOldMasks
+from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePrediction
+from OccupancyDetection.OccupancyDetection import Predict, CreateMaskImages, CreateOverlay, SetupMasks, SetupTensorflow, RemoveOldMasks
 from enum import Enum
 from math import floor
 from PIL import Image
@@ -27,10 +27,10 @@ TestMode = TestModes.Picture
 
 frameCaptureDelay = 5
 videoCaptureSource = 'OccupancyDetection/PL_Test01_repeat.mp4'
-testImagePath = 'OccupancyDetection/PL00.jpg'
+testImagePath = 'OccupancyDetection/PL05.jpg'
 videoStreamAddress = "http://10.0.0.131:8080/video"
 
-maskImagesPath = 'OccupancyDetection/Masks000/*.jpg'
+maskImagesPath = 'OccupancyDetection/Masks005/*.jpg'
 
 labelsTxtFilePath = "OccupancyDetection/retrained_labels.txt"
 graphFilePath = "OccupancyDetection/retrained_graph.pb"
@@ -38,10 +38,17 @@ graphFilePath = "OccupancyDetection/retrained_graph.pb"
 ##
 ##   Functions
 ##    
+def DeleteResultFiles():
+    #   Remove any previous image masks in the masks folder
+    files = glob.glob('Results/*')
+    for f in files:
+        os.remove(f)
 
 ##
 ##   Main
 ##
+
+DeleteResultFiles()
 
 #   Initialize occupancy detection
 RemoveOldMasks()
@@ -58,9 +65,26 @@ if TestMode == TestModes.Picture:
     print("Picture mode")
     image = cv2.imread(testImagePath) 
     #cv2.imwrite('Frame.jpg', image)
-    image_result = Predict(image)
-    cv2.imwrite('image_result.jpg', image_result)
+    
+    #image_result = Predict(image)
+    #cv2.imwrite("Results/image_result.jpg", image_result)
+    CreateMaskImages(image)
+
+    #cv2.imshow("result", image_result)
     #cv2.imshow("Result", image_result)
+
+    #   Fetch mask images and convert to array of cv2 image data
+    maskImagesPath = 'OccupancyDetection/MasksCurrent/*.png'
+    imageMasks = []
+    LicensePlates = []
+    for filename in glob.glob(maskImagesPath):
+        imageMasks.append(filename)
+        output = GetLicensePlatePrediction(filename)
+        LicensePlates.append(output)
+        #print (output)
+
+    image_result = CreateOverlay(image, LicensePlates)
+    cv2.imwrite("Results/image_result.jpg", image_result)
 
 elif TestMode == TestModes.Video:
     print("Video mode")
@@ -110,8 +134,11 @@ elif TestMode == TestModes.Video:
             #   Create threads
             #thread1 = threading.Thread(target=CaptureFrame, args=())
             #thread1 = threading.Thread(target=CreateOverlay, args=())
-            image_result = Predict(image)
+            
+            #image_result = Predict(image)
+            CreateMaskImages(image)
             cv2.imwrite("Results/image_result_" + str(frameCounter) + ".jpg", image_result)
+            
             #thread1.start()
             #thread1.join()
 
@@ -153,9 +180,9 @@ elif TestMode == TestModes.Stream:
         #   Create threads
         #thread1 = threading.Thread(target=CaptureFrame, args=())
         #thread1 = threading.Thread(target=CreateOverlay, args=())
-        image_result = Predict(image)
-        cv2.imwrite("Results/image_result_" + str(frameCounter) + ".jpg", image_result)
-        cv2.imshow("result", image_result)
+        #image_result = Predict(image)
+        #cv2.imwrite("Results/image_result_" + str(frameCounter) + ".jpg", image_result)
+        #cv2.imshow("result", image_result)
         #thread1.start()
         #thread1.join()
 
@@ -169,5 +196,3 @@ elif TestMode == TestModes.Stream:
 #alpr.unload()
 #sess.close()
 cv2.destroyAllWindows()
-
-GetLicensePlateInfo("C:\\Users\\chadh\\Downloads\\PL05_1.jpg")

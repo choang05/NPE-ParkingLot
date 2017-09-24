@@ -78,8 +78,8 @@ def Predict(image):
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
 
         #   Save image to be processed
-        savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.jpg'
-        cv2.imwrite(savedImageFile, image_masked)
+        #savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.jpg'
+        #cv2.imwrite(savedImageFile, image_masked)
 
         #   Resize
         image_masked_resized = cv2.resize(image_masked, (299, 299), fx=1, fy=1) 
@@ -112,6 +112,13 @@ def Predict(image):
         #image_masked_gray = cv2.cvtColor(image_masked,cv2.COLOR_BGR2GRAY)
         ret,thresh = cv2.threshold(image_masks[index], 127,255,0)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+        #   Crop to the mask
+        x, y, width, height = cv2.boundingRect(contours[0])
+        image_mask_cropped = image_masked[y:y+height, x:x+width]
+        #   Save image mask
+        savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.png'
+        cv2.imwrite(savedImageFile, image_mask_cropped)
 
         #   Create seperate image data for modification
         image_overlay = image_overlay_result.copy()
@@ -160,6 +167,117 @@ def Predict(image):
     
     print ("Closing tensorflow session")
     sess.close()
+
+    return image_overlay_result
+
+def CreateMaskImages(image):
+    print ("Creating Masked Images...")
+    
+    # Read the images
+    image_original = image
+    #image_original = image
+    image_overlay_result = image_original.copy()
+
+    for index, element in enumerate(image_masks):
+        #   Create mask
+        mask = image_masks[index]
+        image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
+
+        #   Save image to be processed
+        #savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.jpg'
+        #cv2.imwrite(savedImageFile, image_masked)
+
+        #   Draw contour around masks onto main image
+        #image_masked_gray = cv2.cvtColor(image_masked,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(image_masks[index], 127,255,0)
+        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+        #   Crop to the mask
+        x, y, width, height = cv2.boundingRect(contours[0])
+        image_mask_cropped = image_masked[y:y+height, x:x+width]
+        #   Save image mask
+        savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.png'
+        cv2.imwrite(savedImageFile, image_mask_cropped)
+    
+    print ("Masked Images Created.")
+
+def CreateOverlay(image, licensePlateOutputs):
+    print ("Creating Overlay...")
+
+    #   Create threads
+    #thread1 = threading.Thread(target=CaptureFrame, args=())
+    #thread1 = threading.Thread(target=CreateOverlay, args=())
+
+    #thread1.start()
+    #thread1.join()
+
+    # Read the images
+    image_original = image
+    image_overlay_result = image_original.copy()
+
+    for i, element in enumerate(image_masks):
+        #   Create mask
+        mask = image_masks[i]
+        image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
+
+        #   Draw contour around masks onto main image
+        #image_masked_gray = cv2.cvtColor(image_masked,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(image_masks[i], 127,255,0)
+        im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+        #   Create seperate image data for modification
+        image_overlay = image_overlay_result.copy()
+        
+        result_score = 0
+        result_label = ""
+
+        #   if no license plates were found...
+        if len(licensePlateOutputs[i]) <= 0:
+            result_label = "N/A"
+            cv2.drawContours(image_overlay, contours,-1,(0,0,255), -1)
+        else:
+            result_label = licensePlateOutputs[i][0]
+            result_score = float(licensePlateOutputs[i][1])
+            #	Determine level of occupancy. Green = empty, Red = occupied, yellow = ???
+            #if result_score >= .50:
+            cv2.drawContours(image_overlay, contours,-1,(0,255,0), -1)
+            #else:
+            #    cv2.drawContours(image_overlay, contours,-1,(0,150,150), -1)
+
+        #   Calculate the moment of the contour moment to calculate center coordinates
+        contour_moment = cv2.moments(contours[0])
+        centerX = int(contour_moment['m10']/contour_moment['m00'])
+        centerY = int(contour_moment['m01']/contour_moment['m00'])
+
+        #   Draw text
+        #FONT_HERSHEY_SIMPLEX = 0,
+        #FONT_HERSHEY_PLAIN = 1,
+        #FONT_HERSHEY_DUPLEX = 2,
+        #FONT_HERSHEY_COMPLEX = 3,
+        #FONT_HERSHEY_TRIPLEX = 4,
+        #FONT_HERSHEY_COMPLEX_SMALL = 5,
+        #FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
+        #FONT_HERSHEY_SCRIPT_COMPLEX = 7,
+        #FONT_ITALIC = 16
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        fontSize = 2
+        textThickness = 2
+        cv2.putText(image_overlay_result, "Valid Plate: " + result_label, (centerX, centerY), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay_result, "Predicted Plate: " + result_label, (centerX, centerY + 75), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay_result, "Confidence: " + str(result_score)[:4 + (1-1)] + '%', (centerX, centerY + 150), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)          
+
+        # apply the overlay with transparency, alpha
+        alpha = 0.25
+        cv2.addWeighted(image_overlay, alpha, image_overlay_result, 1 - alpha, 0, image_overlay_result)
+
+        #   Shrink main image and display
+        #image_main_small = cv2.resize(image_overlay_result, (750, 750), fx=1, fy=1) 
+        #   Save result image
+        #cv2.imwrite('image_overlay_result.jpg', image_main_small)
+        #   Display image
+        #cv2.imshow("Result", image_main_small)
+    
+    print ("Overlay Created")
 
     return image_overlay_result
 

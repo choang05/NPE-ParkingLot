@@ -7,6 +7,7 @@ import time
 import glob
 import re
 import subprocess
+import string
 from math import floor
 from PIL import Image
 from openalpr import Alpr
@@ -27,8 +28,33 @@ from openalpr import Alpr
 ##   Functions
 ##    
 
-def GetLicensePlateInfo(imagePath):
-    subprocess.call(["LicensePlateDetection\\alpr.exe", imagePath], shell = True)
+def GetLicensePlatePrediction(imagePath):
+    print ("Predicting License Plate for " + imagePath + "...")
+
+    #   Call alpr function on image path and save as string
+    #subprocess.call(["LicensePlateDetection\\alpr.exe", imagePath], shell = True)
+    output = subprocess.check_output(["LicensePlateDetection\\alpr.exe", imagePath], shell = True)
+
+    #   Convert string as list
+    outputList = output.decode().split()
+
+    #   check if there was no license plate found. If so, return empty list
+    if outputList[0] == "No" and outputList[1] == "license":
+        outputList = []
+        return outputList
+
+    #   Trim list from unnessary information
+    outputList = [x.strip('b') for x in outputList]     #   Remove 'b'
+    outputList = [x.strip('-') for x in outputList]     #   Remove '-'
+    outputList = [x.strip('confidence:') for x in outputList]     #   Remove 'confidence:'
+    outputList = list(filter(None, outputList))         #   Remove empty strings. Must be done AFTER stripping other chars
+    outputList.pop(0)   #   Remove 'Plate0'
+    outputList.pop(0)   #   Remove # of plates found
+    outputList.pop(0)   #   Remove 'results'
+
+    #for string in outputList:
+    #    print (string)
+    return outputList
 
 #def GetLicensePlateInfo(image):
 
