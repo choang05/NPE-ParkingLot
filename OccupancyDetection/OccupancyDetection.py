@@ -47,7 +47,7 @@ def SetupMasks(maskImagesPath):
     for image in image_mask_files:
         image_masks.append(cv2.imread(image, 0))
     
-
+'''
 def Predict(image):
     print ("Starting tensorflow session")
     sess = tf.Session() 
@@ -169,7 +169,7 @@ def Predict(image):
     sess.close()
 
     return image_overlay_result
-
+'''
 def CreateMaskImages(image):
     print ("Creating Masked Images...")
     
@@ -196,12 +196,12 @@ def CreateMaskImages(image):
         x, y, width, height = cv2.boundingRect(contours[0])
         image_mask_cropped = image_masked[y:y+height, x:x+width]
         #   Save image mask
-        savedImageFile = 'OccupancyDetection/MasksCurrent/image_masked_current_' + str(index) + '.png'
+        savedImageFile = 'OccupancyDetection/MasksCurrent/mask' + str(index) + '.png'
         cv2.imwrite(savedImageFile, image_mask_cropped)
     
     print ("Masked Images Created.")
 
-def CreateOverlay(image, licensePlateOutputs):
+def CreateOverlay(image, slots, licensePlateOutputs):
     print ("Creating Overlay...")
 
     #   Create threads
@@ -228,28 +228,33 @@ def CreateOverlay(image, licensePlateOutputs):
         #   Create seperate image data for modification
         image_overlay = image_overlay_result.copy()
         
-        result_score = 0
-        result_label = ""
+        #result_score = 0
+        slot_id = slots[i][0]
+        slot_valid_plate = slots [i][1]
+        slot_isValid = slots [i][2]
 
         #   if no license plates were found...
         if len(licensePlateOutputs[i]) <= 0:
-            result_label = "N/A"
-            cv2.drawContours(image_overlay, contours,-1,(0,0,255), -1)
-        else:
-            result_label = licensePlateOutputs[i][0]
-            result_score = float(licensePlateOutputs[i][1])
-            #	Determine level of occupancy. Green = empty, Red = occupied, yellow = ???
-            #if result_score >= .50:
+            slot_isValid = "Empty"
+            cv2.drawContours(image_overlay, contours,-1,(0, 150, 150), -1)
+        #   else if there is a license plate but it is not a valid plate...
+        elif slot_isValid == False:
+            slot_isValid = "No"
+            cv2.drawContours(image_overlay, contours,-1,(0, 0, 255), -1)
+        #   else, there is a valid license plate in the right parking slot...
+        elif slot_isValid == True:
+            slot_isValid = "Yes"
             cv2.drawContours(image_overlay, contours,-1,(0,255,0), -1)
-            #else:
-            #    cv2.drawContours(image_overlay, contours,-1,(0,150,150), -1)
 
         #   Calculate the moment of the contour moment to calculate center coordinates
         contour_moment = cv2.moments(contours[0])
         centerX = int(contour_moment['m10']/contour_moment['m00'])
         centerY = int(contour_moment['m01']/contour_moment['m00'])
 
-        #   Draw text
+        #   Add adjustments due to text not centered
+        centerX = centerX - 200
+
+        #   Text font templates
         #FONT_HERSHEY_SIMPLEX = 0,
         #FONT_HERSHEY_PLAIN = 1,
         #FONT_HERSHEY_DUPLEX = 2,
@@ -259,12 +264,19 @@ def CreateOverlay(image, licensePlateOutputs):
         #FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
         #FONT_HERSHEY_SCRIPT_COMPLEX = 7,
         #FONT_ITALIC = 16
+
+        #   Text parameters
+        verticalSpacing = 75
         font = cv2.FONT_HERSHEY_SIMPLEX
         fontSize = 2
-        textThickness = 2
-        cv2.putText(image_overlay_result, "Valid Plate: " + result_label, (centerX, centerY), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)         
-        cv2.putText(image_overlay_result, "Predicted Plate: " + result_label, (centerX, centerY + 75), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)         
-        cv2.putText(image_overlay_result, "Confidence: " + str(result_score)[:4 + (1-1)] + '%', (centerX, centerY + 150), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)          
+        textThickness = 8
+        fontColor = (0,0,0)
+
+        #   Create text
+        cv2.putText(image_overlay_result, "Slot: " + str(slot_id), (centerX, centerY), font, fontSize, fontColor, textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay_result, "Valid Plate: " + slot_valid_plate, (centerX, centerY + verticalSpacing), font, fontSize, fontColor, textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay_result, "validity: " + str(slot_isValid), (centerX, centerY + verticalSpacing * 2), font, fontSize, fontColor, textThickness, cv2.LINE_AA)            
+        #cv2.putText(image_overlay_result, "Confidence: " + str(result_score)[:4 + (1-1)] + '%', (centerX, centerY + verticalSpacing * 3), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)          
 
         # apply the overlay with transparency, alpha
         alpha = 0.25

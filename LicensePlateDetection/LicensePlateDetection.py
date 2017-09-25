@@ -52,6 +52,9 @@ def GetLicensePlatePrediction(imagePath):
     outputList.pop(0)   #   Remove # of plates found
     outputList.pop(0)   #   Remove 'results'
 
+    #   Remove confidence values
+    del outputList[1::2]
+    
     #for string in outputList:
     #    print (string)
     return outputList

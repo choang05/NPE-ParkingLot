@@ -9,7 +9,7 @@ import time
 import subprocess
 #from openalpr import Alpr
 from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePrediction
-from OccupancyDetection.OccupancyDetection import Predict, CreateMaskImages, CreateOverlay, SetupMasks, SetupTensorflow, RemoveOldMasks
+from OccupancyDetection.OccupancyDetection import CreateMaskImages, CreateOverlay, SetupMasks, SetupTensorflow, RemoveOldMasks
 from enum import Enum
 from math import floor
 from PIL import Image
@@ -23,17 +23,19 @@ class TestModes(Enum):
     Video = 2
     Stream = 3
 
-TestMode = TestModes.Picture
+testmode = TestModes.Picture
 
-frameCaptureDelay = 5
-videoCaptureSource = 'OccupancyDetection/PL_Test01_repeat.mp4'
-testImagePath = 'OccupancyDetection/PL05.jpg'
-videoStreamAddress = "http://10.0.0.131:8080/video"
+frame_capture_delay = 5
+video_capture_source = 'OccupancyDetection/PL_Test01_repeat.mp4'
+image_path = 'OccupancyDetection/PL05.jpg'
+video_stream_address = "http://10.0.0.131:8080/video"
 
-maskImagesPath = 'OccupancyDetection/Masks005/*.jpg'
+mask_images_path = 'OccupancyDetection/Masks005/*.jpg'
 
-labelsTxtFilePath = "OccupancyDetection/retrained_labels.txt"
-graphFilePath = "OccupancyDetection/retrained_graph.pb"
+labels_text_path = "OccupancyDetection/retrained_labels.txt"
+graph_path = "OccupancyDetection/retrained_graph.pb"
+
+slots = []
 
 ##
 ##   Functions
@@ -44,16 +46,41 @@ def DeleteResultFiles():
     for f in files:
         os.remove(f)
 
+def InitializeSlotsData():
+    #for i in range (0, 3):
+    slot_tuple1 = ('P1', "GBW0349", False)
+    slot_tuple2 = ('P2', "None", False)
+    slot_tuple3 = ('P3', "CR2D788", False)
+    slots.append(slot_tuple1)
+    slots.append(slot_tuple2)
+    slots.append(slot_tuple3)
+
+def GetParkingSlotValidity(slot_tuple, license_plates_to_check):
+    ''' Returns a tuple of each parking slot ID and their validity status  '''
+
+    if len(license_plates_to_check) <= 0:
+        return False
+
+    #print (slot_tuple[1])
+    #print (license_plates_to_check)
+
+    if any(slot_tuple[1] in str for str in license_plates_to_check):
+        return True
+    else:
+        return False
+        
+
 ##
 ##   Main
 ##
 
 DeleteResultFiles()
+InitializeSlotsData()
 
 #   Initialize occupancy detection
 RemoveOldMasks()
-SetupMasks(maskImagesPath)
-SetupTensorflow(labelsTxtFilePath, graphFilePath)
+SetupMasks(mask_images_path)
+SetupTensorflow(labels_text_path, graph_path)
 
 #print ("testing test")
 #startTime = time.time()
@@ -61,9 +88,9 @@ SetupTensorflow(labelsTxtFilePath, graphFilePath)
 #endTime = time.time()
 #print(str('{0:.3g}'.format(endTime - startTime)) + " Seconds")
 
-if TestMode == TestModes.Picture:
+if testmode == TestModes.Picture:
     print("Picture mode")
-    image = cv2.imread(testImagePath) 
+    image = cv2.imread(image_path) 
     #cv2.imwrite('Frame.jpg', image)
     
     #image_result = Predict(image)
@@ -74,23 +101,36 @@ if TestMode == TestModes.Picture:
     #cv2.imshow("Result", image_result)
 
     #   Fetch mask images and convert to array of cv2 image data
-    maskImagesPath = 'OccupancyDetection/MasksCurrent/*.png'
-    imageMasks = []
-    LicensePlates = []
-    for filename in glob.glob(maskImagesPath):
-        imageMasks.append(filename)
-        output = GetLicensePlatePrediction(filename)
-        LicensePlates.append(output)
-        #print (output)
+    mask_images_path = 'OccupancyDetection/MasksCurrent/*.png'
+    image_masks = []
+    license_plates = []
 
-    image_result = CreateOverlay(image, LicensePlates)
+    for i, filename in enumerate(glob.glob(mask_images_path)):
+        image_masks.append(filename)
+
+        #   Get array of license plates predicted for this image mask
+        output = GetLicensePlatePrediction(filename)
+        license_plates.append(output)
+        #print (license_plates)
+
+        #   Get the slot validity 
+        isValid = GetParkingSlotValidity(slots[i], license_plates)
+
+        #   Update the slot validity
+        temp_list = list(slots[i])
+        temp_list[2] = isValid
+        slots[i] = tuple(temp_list)
+
+    print(slots)
+
+    image_result = CreateOverlay(image, slots, license_plates)
     cv2.imwrite("Results/image_result.jpg", image_result)
 
-elif TestMode == TestModes.Video:
+elif testmode == TestModes.Video:
     print("Video mode")
 
     # Create a VideoCapture object
-    cap = cv2.VideoCapture(videoCaptureSource)
+    cap = cv2.VideoCapture(video_capture_source)
 
     # Check if camera opened successfully
     if (cap.isOpened() == False):
@@ -125,7 +165,7 @@ elif TestMode == TestModes.Video:
         cv2.imshow("frame", image_resized)
 
         # Check if this is the frame closest to the delay seconds
-        if delayCounter == (framerate * frameCaptureDelay):
+        if delayCounter == (framerate * frame_capture_delay):
             delayCounter = 0
             frameCounter += 1
 
@@ -149,8 +189,8 @@ elif TestMode == TestModes.Video:
             cap.release()
             break
 
-elif TestMode == TestModes.Stream: 
-    cap = cv2.VideoCapture(videoStreamAddress)
+elif testmode == TestModes.Stream: 
+    cap = cv2.VideoCapture(video_stream_address)
 
     # Check if camera opened successfully
     if (cap.isOpened() == False):
