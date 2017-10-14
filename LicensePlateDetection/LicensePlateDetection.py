@@ -55,8 +55,10 @@ def GetLicensePlatePrediction(imagePath):
     #   Remove confidence values
     del outputList[1::2]
     
+    #   Print detected license plates
     #for string in outputList:
     #    print (string)
+
     return outputList
 
 #def GetLicensePlateInfo(image):

@@ -234,6 +234,7 @@ def CreateOverlay(image, slots, licensePlateOutputs):
         slot_isValid = slots [i][2]
 
         #   if no license plates were found...
+        #print(licensePlateOutputs)
         if len(licensePlateOutputs[i]) <= 0:
             slot_isValid = "Empty"
             cv2.drawContours(image_overlay, contours,-1,(0, 150, 150), -1)
