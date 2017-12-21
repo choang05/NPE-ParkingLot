@@ -20,25 +20,25 @@ label_lines = ""
 ##   Functions
 ##    
 
-def RemoveOldMasks():
-    #   Remove any previous image masks in the masks folder
+#   Delete any previous image masks in the masks folder
+def DeleteOldMasks():
     files = glob.glob('OccupancyDetection/MasksCurrent/*')
     for f in files:
         os.remove(f)
 
-def SetupTensorflow(labelsTxtFilePath, graphFilePath):
-    # Loads label file, strips off carriage return
-    global label_lines 
-    label_lines = [line.rstrip() for line in tf.gfile.GFile(labelsTxtFilePath)]
+#def SetupTensorflow(labelsTxtFilePath, graphFilePath):
+#    # Loads label file, strips off carriage return
+#    global label_lines 
+#    label_lines = [line.rstrip() for line in tf.gfile.GFile(labelsTxtFilePath)]
 
-    # Unpersists graph from file
-    f = tf.gfile.FastGFile(graphFilePath, 'rb')
-    graph_def = tf.GraphDef()
-    graph_def.ParseFromString(f.read())
-    _ = tf.import_graph_def(graph_def, name='')
+#    # Unpersists graph from file
+#    f = tf.gfile.FastGFile(graphFilePath, 'rb')
+#    graph_def = tf.GraphDef()
+#    graph_def.ParseFromString(f.read())
+#    _ = tf.import_graph_def(graph_def, name='')
 
+#   Fetch mask images and convert to array of cv2 image data
 def SetupMasks(maskImagesPath):
-    #   Fetch mask images and convert to array of cv2 image data
     for filename in glob.glob(maskImagesPath):
         image_mask_files.append(filename)
 
@@ -170,17 +170,20 @@ def Predict(image):
 
     return image_overlay_result
 '''
+
+#   Given an image, create the masked version from each image mask
 def CreateMaskImages(image):
     print ("Creating Masked Images...")
-    
+
+    #   Adjust mask to correct size
+    #image = cv2.resize(image, (1280, 720), fx=1, fy=1)
+
     # Read the images
     image_original = image
-    #image_original = image
-    image_overlay_result = image_original.copy()
+    #image_overlay_result = image
 
-    for index, element in enumerate(image_masks):
-        #   Create mask
-        mask = image_masks[index]
+    for i, mask in enumerate(image_masks):
+        #   Mask out the image with the mask
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
 
         #   Save image to be processed
@@ -189,18 +192,23 @@ def CreateMaskImages(image):
 
         #   Draw contour around masks onto main image
         #image_masked_gray = cv2.cvtColor(image_masked,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(image_masks[index], 127,255,0)
+        ret,thresh = cv2.threshold(image_masks[i], 127,255,0)
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
         #   Crop to the mask
         x, y, width, height = cv2.boundingRect(contours[0])
-        image_mask_cropped = image_masked[y:y+height, x:x+width]
+        image_masked = image_masked[y:y+height, x:x+width]
+
+        #   Resize mask into a 1:1 aspect ratio (Sqaure)
+        #image_masked = cv2.resize(image_masked, (600, 600), fx=1, fy=1)
+
         #   Save image mask
-        savedImageFile = 'OccupancyDetection/MasksCurrent/mask' + str(index) + '.png'
-        cv2.imwrite(savedImageFile, image_mask_cropped)
+        savedImageFile = 'OccupancyDetection/MasksCurrent/mask' + str(i) + '.png'
+        cv2.imwrite(savedImageFile, image_masked)
     
     print ("Masked Images Created.")
 
+#   Returns a overlay image showing validity colors and info
 def CreateOverlay(image, slots, licensePlateOutputs):
     print ("Creating Overlay...")
 
@@ -213,11 +221,13 @@ def CreateOverlay(image, slots, licensePlateOutputs):
 
     # Read the images
     image_original = image
-    image_overlay_result = image_original.copy()
+    image_overlay_result = image
 
     for i, element in enumerate(image_masks):
         #   Create mask
         mask = image_masks[i]
+
+        #   Mask out the image with the mask 
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
 
         #   Draw contour around masks onto main image
@@ -226,7 +236,7 @@ def CreateOverlay(image, slots, licensePlateOutputs):
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
         #   Create seperate image data for modification
-        image_overlay = image_overlay_result.copy()
+        image_overlay = image_overlay_result
         
         #result_score = 0
         slot_id = slots[i][0]
@@ -267,10 +277,10 @@ def CreateOverlay(image, slots, licensePlateOutputs):
         #FONT_ITALIC = 16
 
         #   Text parameters
-        verticalSpacing = 75
+        verticalSpacing = 50
         font = cv2.FONT_HERSHEY_SIMPLEX
-        fontSize = 2
-        textThickness = 8
+        fontSize = 1
+        textThickness = 4
         fontColor = (0,0,0)
 
         #   Create text
@@ -290,7 +300,7 @@ def CreateOverlay(image, slots, licensePlateOutputs):
         #   Display image
         #cv2.imshow("Result", image_main_small)
     
-    print ("Overlay Created")
+    #print ("Overlay Created")
 
     return image_overlay_result
 
