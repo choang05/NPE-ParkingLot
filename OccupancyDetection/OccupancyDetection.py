@@ -4,7 +4,7 @@ import threading
 import numpy as np
 import cv2
 import time
-import tensorflow as tf
+#import tensorflow as tf
 import glob
 import re
 from math import floor

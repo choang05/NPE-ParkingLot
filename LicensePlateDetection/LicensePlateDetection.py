@@ -10,7 +10,7 @@ import subprocess
 import string
 from math import floor
 from PIL import Image
-from openalpr import Alpr
+#from openalpr import Alpr
 #
 #   Variables
 #
@@ -34,7 +34,7 @@ def GetLicensePlatePrediction(imagePath):
     #   Call alpr function on image path and save as string
     #subprocess.call(["LicensePlateDetection\\alpr.exe", imagePath], shell = True)
     output = subprocess.check_output(["LicensePlateDetection\\alpr.exe", imagePath], shell = True)
-
+ 
     #   Convert string as list
     outputList = output.decode().split()
 

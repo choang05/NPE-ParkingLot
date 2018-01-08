@@ -59,12 +59,14 @@ def DeleteResultFiles():
 
 def InitializeSlotsData():
     #for i in range (0, 3):
-    slot_tuple1 = ('P1', "JLZ8078", False)
-    slot_tuple2 = ('P2', "FTP0928", False)
-    slot_tuple3 = ('P3', "GTF3287", False)
+    slot_tuple1 = ('P1', "89V6366", False)
+    slot_tuple2 = ('P2', "HZV0026", False)
+    slot_tuple3 = ('P3', "GBV3265", False)
+    slot_tuple4 = ('P4', "BVC7649", False)
     slots.append(slot_tuple1)
     slots.append(slot_tuple2)
     slots.append(slot_tuple3)
+    slots.append(slot_tuple4)
 
 #   initialize the image file paths
 def SetupImagesPath(ImagesPath):
