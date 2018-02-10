@@ -7,6 +7,7 @@ import re
 import cv2
 import time
 import subprocess
+import requests
 #from openalpr import Alpr
 from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePrediction
 from OccupancyDetection.OccupancyDetection import CreateMaskImages, CreateOverlay, SetupMasks, DeleteOldMasks
@@ -22,12 +23,13 @@ from configparser import SafeConfigParser
 CONFIG_FILE_PATH = 'config.ini'
 
 class TestModes(Enum):
+    Debug = 0
     Picture = 1
     Video = 2
     Stream = 3
 
 #   Settings
-testmode = TestModes.Stream
+testmode = TestModes.Debug
 frame_capture_delay = None
 video_capture_source = None
 images_path = None
@@ -37,6 +39,7 @@ video_stream_address = None
 mask_images_path = None
 labels_text_path = None
 graph_path = None
+post_request_url = None
 
 slots = []
 capture = None
@@ -210,6 +213,7 @@ def InitializeConfig():
     global mask_images_path
     global labels_text_path
     global graph_path
+    global post_request_url
 
     #   Assign variables from config
     #   Main Settings
@@ -222,6 +226,7 @@ def InitializeConfig():
     mask_images_path = config.get("Settings", "mask_images_path")
     labels_text_path = config.get("Settings", "labels_text_path")
     graph_path = config.get("Settings", "graph_path")
+    post_request_url = config.get("Settings", "post_request_url")
 
 
 ##
@@ -240,6 +245,7 @@ def main():
     global graph_path
     global testmode
     global capture
+    global post_request_url
 
     #   Initialize
     InitializeConfig()
@@ -256,8 +262,19 @@ def main():
 
     #endTime = time.time()
     #print(str('{0:.3g}'.format(endTime - startTime)) + " Seconds")
+    if testmode == TestModes.Debug:
+        print("Debug mode...")
+        
+        response = requests.get(post_request_url)
+        print(response)
 
-    if testmode == TestModes.Picture:
+        #json = { "apartment_id": 2, "license_plate": "#87d21b", "_token": "lav9yCUGAx1Ba1lNfI6dHd3VXBJLbjf1cY7WQx0y"}
+        response = requests.post(post_request_url, json = { "apartment_id": 2, "license_plate": "#ABC123", "_token": "lav9yCUGAx1Ba1lNfI6dHd3VXBJLbjf1cY7WQx0y"})
+        print(response)
+        print(response.json())
+        
+
+    elif testmode == TestModes.Picture:
         print("Picture mode")
 
         SetupImagesPath(images_path)
