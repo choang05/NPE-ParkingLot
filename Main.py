@@ -8,6 +8,8 @@ import cv2
 import time
 import subprocess
 import requests
+#import time
+import threading
 #from openalpr import Alpr
 from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePrediction
 from OccupancyDetection.OccupancyDetection import CreateMaskImages, CreateOverlay, SetupMasks, DeleteOldMasks
@@ -22,14 +24,14 @@ from configparser import SafeConfigParser
 #
 CONFIG_FILE_PATH = 'config.ini'
 
-class TestModes(Enum):
+class Modes(Enum):
     Debug = 0
     Picture = 1
     Video = 2
     Stream = 3
 
 #   Settings
-testmode = TestModes.Debug
+mode = None
 frame_capture_delay = None
 video_capture_source = None
 images_path = None
@@ -124,6 +126,9 @@ def CreateResults(image):
     global frameCounter
     global result_image_size
 
+    #   Start timer
+    elapsed_time = time.time()
+
     #   Resize
     #image = cv2.resize(image, (1280, 720), fx=1, fy=1) 
 
@@ -196,6 +201,8 @@ def CreateResults(image):
 
     #CreateOverlay()
 
+    print("Thread time:", time.time() - elapsed_time)
+
 #   Parse the config file and evaluate
 def InitializeConfig():
     print("Initializing config...")
@@ -204,6 +211,7 @@ def InitializeConfig():
     config.read(CONFIG_FILE_PATH)
 
     #   Create references to globals
+    global mode
     global frame_capture_delay
     global video_capture_source
     global images_path
@@ -217,6 +225,7 @@ def InitializeConfig():
 
     #   Assign variables from config
     #   Main Settings
+    mode = Modes(config.getint("Settings", "mode"))
     frame_capture_delay = config.getint("Settings", "frame_capture_delay")
     video_capture_source = config.get("Settings", "video_capture_source")
     images_path = config.get("Settings", "images_path")
@@ -235,6 +244,7 @@ def InitializeConfig():
 
 def main():  
     #   Refereance globals
+    global mode
     global frameCounter
     global frame_capture_delay
     global video_capture_source
@@ -243,7 +253,6 @@ def main():
     global mask_images_path
     global labels_text_path
     global graph_path
-    global testmode
     global capture
     global post_request_url
 
@@ -262,64 +271,43 @@ def main():
 
     #endTime = time.time()
     #print(str('{0:.3g}'.format(endTime - startTime)) + " Seconds")
-    if testmode == TestModes.Debug:
+    print("Mode:", mode)
+
+    if mode == Modes.Debug:
         print("Debug mode...")
-        
+
         response = requests.get(post_request_url)
         print(response)
 
         #json = { "apartment_id": 2, "license_plate": "#87d21b", "_token": "lav9yCUGAx1Ba1lNfI6dHd3VXBJLbjf1cY7WQx0y"}
         response = requests.post(post_request_url, json = { "apartment_id": 2, "license_plate": "#ABC123", "_token": "lav9yCUGAx1Ba1lNfI6dHd3VXBJLbjf1cY7WQx0y"})
         print(response)
-        print(response.json())
-        
+        print(response.json())        
 
-    elif testmode == TestModes.Picture:
-        print("Picture mode")
+    elif mode == Modes.Picture:
+
+        #   Start timer
+        elapsed_time = time.time()
 
         SetupImagesPath(images_path)
 
         for index, imagePath in enumerate(image_files):
-            image = cv2.imread(imagePath) 
-            #cv2.imwrite('Frame.jpg', image)
-    
-            #image_result = Predict(image)
-            #cv2.imwrite("Results/image_result.jpg", image_result)
-            CreateMaskImages(image)
+            image = cv2.imread(imagePath)
+            thread = threading.Thread(target=CreateResults, args=(image,))
+            thread.start()
 
-            #cv2.imshow("result", image_result)
-            #cv2.imshow("Result", image_result)
+        #image2 = cv2.imread(image_files[1]) 
+        #thread2 = threading.Thread(target=CreateResults, args=(image2,))
 
-            #   Fetch mask images and convert to array of cv2 image data
-            mask_images_path = 'OccupancyDetection/MasksCurrent/*.png'
-            image_masks = []
-            license_plates = []
+        #thread1.start()
+        #thread2.start()
 
-            for i, filename in enumerate(glob.glob(mask_images_path)):
-                image_masks.append(filename)
+        #thread1.join()
+        #thread2.join()
 
-                #   Get array of license plates predicted for this image mask
-                output = GetLicensePlatePrediction(filename)
+        print("Thread time:", time.time() - elapsed_time)
 
-                license_plates.append(output)
-
-                #   Get the slot validity 
-                isValid = GetParkingSlotValidity(slots[i], output)
-
-                #   Update the slot validity
-                temp_list = list(slots[i])
-                temp_list[2] = isValid
-                slots[i] = tuple(temp_list)
-
-            print(slots)
-
-            #print(license_plates)
-
-            image_result = CreateOverlay(image, slots, license_plates)
-            filename = "Results/" + str(index) + ".jpg"
-            cv2.imwrite(filename, image_result)
-
-    elif testmode == TestModes.Video:
+    elif mode == Modes.Video:
         print("Video mode")
 
         # Create a VideoCapture object
@@ -382,7 +370,7 @@ def main():
                 capture.release()
                 break
 
-    elif testmode == TestModes.Stream: 
+    elif mode == Modes.Stream: 
         #   cache capture source
         capture = cv2.VideoCapture(video_stream_address)
 

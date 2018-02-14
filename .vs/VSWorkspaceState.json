@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\LicensePlateDetection",
-    "\\LicensePlateDetection\\TestData"
+    "\\LicensePlateDetection"
   ],
-  "SelectedNode": "\\LicensePlateDetection\\LicensePlateDetection.py",
+  "SelectedNode": "\\Main.py",
   "PreviewInSolutionExplorer": false
 }
