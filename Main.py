@@ -8,6 +8,7 @@ import cv2
 import time
 import subprocess
 import requests
+import json
 #import time
 import threading
 #from openalpr import Alpr
@@ -15,7 +16,7 @@ from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePredictio
 from OccupancyDetection.OccupancyDetection import CreateMaskImages, CreateOverlay, SetupMasks, DeleteOldMasks
 from enum import Enum
 from math import floor
-from PIL import Image
+#from PIL import Image
 from difflib import SequenceMatcher
 from configparser import SafeConfigParser
 
@@ -62,16 +63,16 @@ def DeleteResultFiles():
     for f in files:
         os.remove(f)
 
-def InitializeSlotsData():
-    #for i in range (0, 3):
-    slot_tuple1 = ('P1', "89V6366", False)
-    slot_tuple2 = ('P2', "HZV0026", False)
-    slot_tuple3 = ('P3', "GBV3265", False)
-    slot_tuple4 = ('P4', "BVC7649", False)
-    slots.append(slot_tuple1)
-    slots.append(slot_tuple2)
-    slots.append(slot_tuple3)
-    slots.append(slot_tuple4)
+def InitializeSlotsData():    
+    #   Read json file of license plate data
+    with open('data.json') as json_file:  
+        json_data = json.load(json_file)
+        for slot in json_data['parkingSlots']:           
+            #  Create tuple
+            slot_tuple = (slot['id'], slot['validPlate'], False)
+            #print(slot_tuple)
+            #   Append tuple to array of slots
+            slots.append(slot_tuple)
 
 #   initialize the image file paths
 def SetupImagesPath(ImagesPath):
@@ -291,10 +292,10 @@ def main():
 
         SetupImagesPath(images_path)
 
-        for index, imagePath in enumerate(image_files):
-            image = cv2.imread(imagePath)
-            thread = threading.Thread(target=CreateResults, args=(image,))
-            thread.start()
+        #for index, imagePath in enumerate(image_files):
+        #    image = cv2.imread(imagePath)
+        #    thread = threading.Thread(target=CreateResults, args=(image,))
+        #    thread.start()
 
         #image2 = cv2.imread(image_files[1]) 
         #thread2 = threading.Thread(target=CreateResults, args=(image2,))

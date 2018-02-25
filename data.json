@@ -1,0 +1,16 @@
+{
+  "parkingSlots": [
+    {
+      "id": "P1",
+      "validPlate": "GBW0349"
+    },
+    {
+      "id": "P2",
+      "validPlate": "None"
+    },
+    {
+      "id": "P3",
+      "validPlate": "CR2D788"
+    }
+  ]
+}

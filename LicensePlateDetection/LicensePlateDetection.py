@@ -9,7 +9,7 @@ import re
 import subprocess
 import string
 from math import floor
-from PIL import Image
+#from PIL import Image
 #from openalpr import Alpr
 #
 #   Variables

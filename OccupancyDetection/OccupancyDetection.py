@@ -8,7 +8,7 @@ import time
 import glob
 import re
 from math import floor
-from PIL import Image
+#from PIL import Image
 #
 #   Variables
 #
