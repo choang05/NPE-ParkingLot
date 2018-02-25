@@ -44,6 +44,7 @@ labels_text_path = None
 graph_path = None
 post_request_url = None
 
+cameras = []
 slots = []
 capture = None
 
@@ -67,12 +68,18 @@ def InitializeSlotsData():
     #   Read json file of license plate data
     with open('data.json') as json_file:  
         json_data = json.load(json_file)
-        for slot in json_data['parkingSlots']:           
-            #  Create tuple
-            slot_tuple = (slot['id'], slot['validPlate'], False)
-            #print(slot_tuple)
+        for camera in json_data['Cameras']:           
+            #  Create camera tuple
+            camera_tuple = (camera['id'], camera['ipAddress'], camera['slots'])
+            for slot in camera_tuple[2]:
+                #print (slot)
+                for plate in slot['validPlates']:
+                    print (plate['plate'])
+
             #   Append tuple to array of slots
-            slots.append(slot_tuple)
+            cameras.append(camera_tuple)
+
+    #slot_tuple = (camera['id'], camera['ipAddress'], False)
 
 #   initialize the image file paths
 def SetupImagesPath(ImagesPath):

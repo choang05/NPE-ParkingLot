@@ -1,16 +1,83 @@
 {
-  "parkingSlots": [
+  "Cameras": 
+  [
     {
-      "id": "P1",
-      "validPlate": "GBW0349"
+      "id": "C1",
+      "ipAddress": "www.A",
+      "slots": 
+      [
+        {
+          "id": "P0",
+          "validPlates": 
+          [
+            {
+              "plate": "HSK5419"
+            }
+          ]
+        },
+        {
+          "id": "P1",
+          "validPlates": 
+          [
+            {
+              "plate": "DRB7040"
+            }
+          ]
+        },
+        {
+          "id": "P2",
+          "validPlates": 
+          [
+            {
+              "plate": "658MJM"
+            }
+          ]
+        },
+        {
+          "id": "P3",
+          "validPlates": 
+          [
+            {
+              "plate": "GBV__65"
+            }
+          ]
+        }
+      ]
     },
+
     {
-      "id": "P2",
-      "validPlate": "None"
-    },
-    {
-      "id": "P3",
-      "validPlate": "CR2D788"
+      "id": "C2",
+      "ipAddress": "www.B",
+      "slots": 
+      [
+        {
+          "id": "P4",
+          "validPlates": 
+          [
+            {
+              "plate": "BVC7649"
+            }
+          ]
+        },
+        {
+          "id": "P5",
+          "validPlates": 
+          [
+            {
+              "plate": "BXT4267"
+            }
+          ]
+        },
+        {
+          "id": "P6",
+          "validPlates": 
+          [
+            {
+              "plate": "JKJ5124"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
