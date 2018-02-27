@@ -300,14 +300,16 @@ def main():
 
         #   for each camera...
         for camera in cameras:
+            print('Attempting to connect to camera', camera[0], 'at IP address:', camera[1] + '...')
+
             #   set capture source of ip address of camera
             capture = cv2.VideoCapture(camera[1])
-
+			
             # Check if camera opened successfully
             if (capture.isOpened() == True):
-                print('Processing camera', camera[0], 'at IP address:', camera[1] + '...')
+                print('Connected!')
             else:
-                print('Could not connect to,' camera[0])
+                print('Could not connect to', camera[1])
                     # print(camera_tuple[1])
             # for slot in camera_tuple[2]:
             #     for plate in slot['validPlates']:
