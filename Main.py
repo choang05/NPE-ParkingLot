@@ -34,11 +34,10 @@ class Modes(Enum):
 #   Settings
 mode = None
 frame_capture_delay = None
-video_capture_source = None
+#video_capture_source = None
 images_path = None
 results_save_path = None
 result_image_size = None
-video_stream_address = None
 mask_images_path = None
 labels_text_path = None
 graph_path = None
@@ -71,10 +70,10 @@ def InitializeSlotsData():
         for camera in json_data['Cameras']:           
             #  Create camera tuple
             camera_tuple = (camera['id'], camera['ipAddress'], camera['slots'])
-            for slot in camera_tuple[2]:
-                #print (slot)
-                for plate in slot['validPlates']:
-                    print (plate['plate'])
+            # print(camera_tuple[1])
+            # for slot in camera_tuple[2]:
+            #     for plate in slot['validPlates']:
+            #         print (plate['plate'])
 
             #   Append tuple to array of slots
             cameras.append(camera_tuple)
@@ -225,7 +224,7 @@ def InitializeConfig():
     global images_path
     global results_save_path
     global result_image_size
-    global video_stream_address
+    #global video_stream_address
     global mask_images_path
     global labels_text_path
     global graph_path
@@ -239,7 +238,7 @@ def InitializeConfig():
     images_path = config.get("Settings", "images_path")
     results_save_path = config.get("Settings", "results_save_path")
     result_image_size = [int(i) for i in config.get("Settings", "result_image_size").split(',')] #   List from config returns strings so it needs to be converted to list of ints
-    video_stream_address = config.get("Settings", "video_stream_address")
+    #video_stream_address = config.get("Settings", "video_stream_address")
     mask_images_path = config.get("Settings", "mask_images_path")
     labels_text_path = config.get("Settings", "labels_text_path")
     graph_path = config.get("Settings", "graph_path")
@@ -257,7 +256,7 @@ def main():
     global frame_capture_delay
     global video_capture_source
     global images_path
-    global video_stream_address
+    #global video_stream_address
     global mask_images_path
     global labels_text_path
     global graph_path
@@ -299,6 +298,21 @@ def main():
 
         SetupImagesPath(images_path)
 
+        #   for each camera...
+        for camera in cameras:
+            #   set capture source of ip address of camera
+            capture = cv2.VideoCapture(camera[1])
+
+            # Check if camera opened successfully
+            if (capture.isOpened() == True):
+                print('Processing camera', camera[0], 'at IP address:', camera[1] + '...')
+            else:
+                print('Could not connect to,' camera[0])
+                    # print(camera_tuple[1])
+            # for slot in camera_tuple[2]:
+            #     for plate in slot['validPlates']:
+            #         print (plate['plate'])
+
         #for index, imagePath in enumerate(image_files):
         #    image = cv2.imread(imagePath)
         #    thread = threading.Thread(target=CreateResults, args=(image,))
@@ -319,8 +333,8 @@ def main():
         print("Video mode")
 
         # Create a VideoCapture object
-        capture = cv2.VideoCapture(video_capture_source)
-
+        #capture = cv2.VideoCapture(video_capture_source)
+        capture = None
         # Check if camera opened successfully
         if (capture.isOpened() == False):
             print("Unable to read camera feed")
@@ -380,8 +394,8 @@ def main():
 
     elif mode == Modes.Stream: 
         #   cache capture source
-        capture = cv2.VideoCapture(video_stream_address)
-
+        #capture = cv2.VideoCapture(video_stream_address)
+        capture = None
         # Check if camera opened successfully
         if (capture.isOpened() == True):
             nexttime = time.time()
@@ -400,8 +414,8 @@ def main():
                     #   [BUG] if you do not recache the capture after X iterations, it crashes due to an issue with ffmpeg failing to decode stream.
                     if frameCounter % 25 == 0:
                         print("Recaching capture...")
-                        capture = cv2.VideoCapture(video_stream_address)
-
+                        #capture = cv2.VideoCapture(video_stream_address)
+                        capture = None
                     print("sleeping for", str(frame_capture_delay), "seconds...")
                     time.sleep(frame_capture_delay)
 

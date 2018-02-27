@@ -3,7 +3,7 @@
   [
     {
       "id": "C1",
-      "ipAddress": "www.A",
+      "ipAddress": "rtsp://admin:123456@10.1.10.175:554/profile1",
       "slots": 
       [
         {
@@ -47,7 +47,7 @@
 
     {
       "id": "C2",
-      "ipAddress": "www.B",
+      "ipAddress": "rtsp://admin:admin1357@10.1.10.87:554/1/stream1",
       "slots": 
       [
         {
