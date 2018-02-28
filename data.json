@@ -3,79 +3,44 @@
   [
     {
       "id": "C1",
-      "ipAddress": "rtsp://admin:123456@10.1.10.176:554/profile1",
+      "ipAddress": "rtsp://admin:admin1357@10.1.10.87:554/1/stream1",
       "slots": 
       [
         {
           "id": "P0",
-          "validPlates": 
-          [
-            {
-              "plate": "HSK5419"
-            }
-          ]
+          "validPlates":["HSK5419"]
         },
         {
           "id": "P1",
-          "validPlates": 
-          [
-            {
-              "plate": "DRB7040"
-            }
-          ]
+          "validPlates":["DRB7040"]
         },
         {
           "id": "P2",
-          "validPlates": 
-          [
-            {
-              "plate": "658MJM"
-            }
-          ]
+          "validPlates": ["658MJM"]
         },
         {
           "id": "P3",
-          "validPlates": 
-          [
-            {
-              "plate": "GBV__65"
-            }
-          ]
+          "validPlates":["GBV3265"]
         }
       ]
     },
 
     {
       "id": "C2",
-      "ipAddress": "rtsp://admin:admin1357@10.1.10.87:554/1/stream1",
+      "ipAddress": "rtsp://admin:123456@10.1.10.176:554/profile1",
       "slots": 
       [
         {
           "id": "P4",
-          "validPlates": 
-          [
-            {
-              "plate": "BVC7649"
-            }
-          ]
+          "validPlates": ["BVC7649"]
         },
         {
           "id": "P5",
-          "validPlates": 
-          [
-            {
-              "plate": "BXT4267"
-            }
-          ]
+          "validPlates": ["BXT4267"]
         },
         {
           "id": "P6",
-          "validPlates": 
-          [
-            {
-              "plate": "JKJ5124"
-            }
-          ]
+          "validPlates": ["JKJ5124"]
         }
       ]
     }
