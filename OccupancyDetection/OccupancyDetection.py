@@ -172,7 +172,7 @@ def Predict(image):
 '''
 
 #   Given an image, create the masked version from each image mask
-def CreateMaskImages(image):
+def CreateCroppedImages(image):
     print ("Creating Masked Images...")
 
     #   Adjust mask to correct size
@@ -181,6 +181,10 @@ def CreateMaskImages(image):
     # Read the images
     image_original = image
     #image_overlay_result = image
+
+    cv2.imshow("image", image)
+    cv2.imshow("image_OG", image_original)
+    cv2.imshow("image_mask", image_masks[0])
 
     for i, mask in enumerate(image_masks):
         #   Mask out the image with the mask

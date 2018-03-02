@@ -144,7 +144,7 @@ def CreateResults(image):
     #image = cv2.resize(image, (1280, 720), fx=1, fy=1) 
 
     #   (OccupancyDetection.py)
-    CreateMaskImages(image)
+    CreateCroppedImages(image)
 
     #cv2.imshow("result", image_result)
     #cv2.imshow("Result", image_result)
