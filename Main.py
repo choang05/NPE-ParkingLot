@@ -14,7 +14,7 @@ import json
 #from openalpr import Alpr
 from multiprocessing import Pool
 from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePrediction
-from OccupancyDetection.OccupancyDetection import CreateMaskImages, CreateOverlay, SetupMasks, DeleteOldMasks
+from OccupancyDetection.OccupancyDetection import CreateCroppedImages, CreateOverlay, SetupMasks, DeleteOldMasks
 from enum import Enum
 from math import floor
 #from PIL import Image
