@@ -173,20 +173,20 @@ def CreateResults(image):
     #print(license_plates)
 
     #   Create overlay
-    image_result = CreateOverlay(image, slots, license_plates)
+    #image_result = CreateOverlay(image, slots, license_plates)
 
     #   Shrink image so it takes less space
-    image_result = cv2.resize(image_result, (result_image_size[0], result_image_size[1]), fx=1, fy=1)
+    ##image_result = cv2.resize(image_result, (result_image_size[0], result_image_size[1]), fx=1, fy=1)
     
     #   Determine if directory exists
-    if not os.path.exists(results_save_path):
-        print(results_save_path, "doesn't exist! Creating new directory...")
-        os.makedirs(results_save_path)
+    #if not os.path.exists(results_save_path):
+    #    print(results_save_path, "doesn't exist! Creating new directory...")
+    #    os.makedirs(results_save_path)
 
     #   save it to file
-    filename = str(frameCounter) + ".jpg"
-    cv2.imwrite(results_save_path + filename, image_result)
-    print(filename, "saved to", results_save_path)
+    #filename = str(frameCounter) + ".jpg"
+    #cv2.imwrite(results_save_path + filename, image_result)
+    #print(filename, "saved to", results_save_path)
 
     #   Increase file counter
     frameCounter += 1
