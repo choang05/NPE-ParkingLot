@@ -182,6 +182,9 @@ def CreateCroppedImages(image):
     image_original = image
     #image_overlay_result = image
 
+    #   Display image
+    cv2.imshow("image", image)
+
     for i, mask in enumerate(image_masks):
         #   Mask out the image with the mask
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
@@ -205,6 +208,9 @@ def CreateCroppedImages(image):
         #   Save image mask
         savedImageFile = 'OccupancyDetection/MasksCurrent/mask' + str(i) + '.png'
         cv2.imwrite(savedImageFile, image_masked)
+
+        #   Display image
+        cv2.imshow("masked image", image_masked)
     
     print ("Masked Images Created.")
 
