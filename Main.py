@@ -10,8 +10,9 @@ import subprocess
 import requests
 import json
 #import time
-import threading
+#import threading
 #from openalpr import Alpr
+from multiprocessing import Pool
 from LicensePlateDetection.LicensePlateDetection import GetLicensePlatePrediction
 from OccupancyDetection.OccupancyDetection import CreateMaskImages, CreateOverlay, SetupMasks, DeleteOldMasks
 from enum import Enum
@@ -39,10 +40,12 @@ images_path = None
 results_save_path = None
 result_image_size = None
 mask_images_path = None
+cropped_images_path = None
 labels_text_path = None
 graph_path = None
 post_request_url = None
 
+#   Variables
 cameras = []
 slots = []
 capture = None
@@ -132,6 +135,7 @@ def GetStringSimilarity(str1, str2):
 def CreateResults(image):
     global frameCounter
     global result_image_size
+    global cropped_images_path
 
     #   Start timer
     elapsed_time = time.time()
@@ -145,13 +149,11 @@ def CreateResults(image):
     #cv2.imshow("result", image_result)
     #cv2.imshow("Result", image_result)
 
-    #   Fetch mask images and convert to array of cv2 image data
-    mask_images_path = 'OccupancyDetection/MasksCurrent/*.png'
     image_masks = []
     license_plates = []
 
     #   Loop through each mask and adjust validity
-    for i, filename in enumerate(glob.glob(mask_images_path)):
+    for i, filename in enumerate(glob.glob(cropped_images_path)):
         image_masks.append(filename)
 
         #   Get array of license plates predicted for this image mask
@@ -226,6 +228,7 @@ def InitializeConfig():
     global result_image_size
     #global video_stream_address
     global mask_images_path
+    global cropped_images_path
     global labels_text_path
     global graph_path
     global post_request_url
@@ -240,6 +243,7 @@ def InitializeConfig():
     result_image_size = [int(i) for i in config.get("Settings", "result_image_size").split(',')] #   List from config returns strings so it needs to be converted to list of ints
     #video_stream_address = config.get("Settings", "video_stream_address")
     mask_images_path = config.get("Settings", "mask_images_path")
+    cropped_images_path = config.get("Settings", "cropped_images_path")
     labels_text_path = config.get("Settings", "labels_text_path")
     graph_path = config.get("Settings", "graph_path")
     post_request_url = config.get("Settings", "post_request_url")
@@ -278,6 +282,8 @@ def main():
 
     #endTime = time.time()
     #print(str('{0:.3g}'.format(endTime - startTime)) + " Seconds")
+    pool = Pool()
+
     print("Mode:", mode)
 
     if mode == Modes.Debug:
@@ -290,9 +296,10 @@ def main():
         response = requests.post(post_request_url, json = { "apartment_id": 2, "license_plate": "#ABC123", "_token": "lav9yCUGAx1Ba1lNfI6dHd3VXBJLbjf1cY7WQx0y"})
         print(response)
         print(response.json())        
-
+    
+    ### PICTURE MODE ###
     elif mode == Modes.Picture:
-
+        
         #   Start timer
         elapsed_time = time.time()
 
@@ -300,14 +307,20 @@ def main():
 
         #   for each camera...
         for camera in cameras:
+
             print('Attempting to connect to camera', camera[0], 'at IP address:', camera[1] + '...')
 
             #   set capture source of ip address of camera
             capture = cv2.VideoCapture(camera[1])
-			
+
             # Check if camera opened successfully
             if (capture.isOpened() == True):
                 print('Connected!')
+                #   Create the result from capture image
+                CreateResults(image)
+
+                print("sleeping for", str(frame_capture_delay), "seconds...")
+                time.sleep(frame_capture_delay)
             else:
                 print('Could not connect to', camera[1])
                     # print(camera_tuple[1])
@@ -331,69 +344,71 @@ def main():
 
         print("Thread time:", time.time() - elapsed_time)
 
-    elif mode == Modes.Video:
-        print("Video mode")
+    ### VIDEO MODE ###
+    #elif mode == Modes.Video:
+    #    print("Video mode")
 
-        # Create a VideoCapture object
-        #capture = cv2.VideoCapture(video_capture_source)
-        capture = None
-        # Check if camera opened successfully
-        if (capture.isOpened() == False):
-            print("Unable to read camera feed")
+    #    # Create a VideoCapture object
+    #    #capture = cv2.VideoCapture(video_capture_source)
+    #    capture = None
+    #    # Check if camera opened successfully
+    #    if (capture.isOpened() == False):
+    #        print("Unable to read camera feed")
 
-        # Find OpenCV version
-        (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
+    #    # Find OpenCV version
+    #    (major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 
-        # With webcam get(CV_CAP_PROP_FPS) does not work.
-        if int(major_ver) < 3:
-            framerate = capture.get(cv2.cv.CV_CAP_PROP_FPS)
-            print
-            "Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(framerate)
-        else:
-            framerate = capture.get(cv2.CAP_PROP_FPS)
-            print
-            "Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(framerate)
+    #    # With webcam get(CV_CAP_PROP_FPS) does not work.
+    #    if int(major_ver) < 3:
+    #        framerate = capture.get(cv2.cv.CV_CAP_PROP_FPS)
+    #        print
+    #        "Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(framerate)
+    #    else:
+    #        framerate = capture.get(cv2.CAP_PROP_FPS)
+    #        print
+    #        "Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(framerate)
 
-        delayCounter = 0
-        frameCounter = 0
+    #    delayCounter = 0
+    #    frameCounter = 0
 
-        while(True):
+    #    while(True):
 
-            # Capture frame-by-frame
-            success, image = capture.read()
-            delayCounter += 1
+    #        # Capture frame-by-frame
+    #        success, image = capture.read()
+    #        delayCounter += 1
 
-            #   Resize
-            image_resized = cv2.resize(image, (1280, 720), fx=1, fy=1) 
+    #        #   Resize
+    #        image_resized = cv2.resize(image, (1280, 720), fx=1, fy=1) 
 
-            #   Draw image
-            cv2.imshow("frame", image_resized)
+    #        #   Draw image
+    #        cv2.imshow("frame", image_resized)
 
-            # Check if this is the frame closest to the delay seconds
-            if delayCounter == (framerate * frame_capture_delay):
-                delayCounter = 0
-                frameCounter += 1
+    #        # Check if this is the frame closest to the delay seconds
+    #        if delayCounter == (framerate * frame_capture_delay):
+    #            delayCounter = 0
+    #            frameCounter += 1
 
-                #cv2.imwrite("Frame.jpg", image)
+    #            #cv2.imwrite("Frame.jpg", image)
 
-                #   Create threads
-                #thread1 = threading.Thread(target=CaptureFrame, args=())
-                #thread1 = threading.Thread(target=CreateOverlay, args=())
+    #            #   Create threads
+    #            #thread1 = threading.Thread(target=CaptureFrame, args=())
+    #            #thread1 = threading.Thread(target=CreateOverlay, args=())
             
-                #image_result = Predict(image)
-                CreateMaskImages(image)
-                cv2.imwrite("Results/image_result_" + str(frameCounter) + ".jpg", image_result)
+    #            #image_result = Predict(image)
+    #            CreateMaskImages(image)
+    #            cv2.imwrite("Results/image_result_" + str(frameCounter) + ".jpg", image_result)
             
-                #thread1.start()
-                #thread1.join()
+    #            #thread1.start()
+    #            #thread1.join()
 
-                #CreateOverlay()
+    #            #CreateOverlay()
 
-            # Check end of video
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                capture.release()
-                break
+    #        # Check end of video
+    #        if cv2.waitKey(25) & 0xFF == ord('q'):
+    #            capture.release()
+    #            break
 
+    ### STREAM MODE ###
     elif mode == Modes.Stream: 
         #   cache capture source
         #capture = cv2.VideoCapture(video_stream_address)
