@@ -208,9 +208,6 @@ def CreateCroppedImages(image):
         #   Save image mask
         savedImageFile = 'OccupancyDetection/MasksCurrent/mask' + str(i) + '.png'
         cv2.imwrite(savedImageFile, image_masked)
-
-        #   Display image
-        cv2.imshow("masked image", image_masked)
     
     print ("Masked Images Created.")
 
