@@ -316,8 +316,13 @@ def main():
             # Check if camera opened successfully
             if (capture.isOpened() == True):
                 print('Connected!')
-                #   Create the result from capture image
-                CreateResults(image)
+                #   Capture frame
+                isCaptureSuccess, image = capture.read()
+
+                #   if image capture is sucessful... 
+                if isCaptureSuccess:
+                    #   Create the result from capture image
+                    CreateResults(capture.read())
 
                 print("sleeping for", str(frame_capture_delay), "seconds...")
                 time.sleep(frame_capture_delay)
