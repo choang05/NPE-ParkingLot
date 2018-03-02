@@ -322,7 +322,7 @@ def main():
                 #   if image capture is sucessful... 
                 if isCaptureSuccess:
                     #   Create the result from capture image
-                    CreateResults(capture.read())
+                    CreateResults(image)
 
                 print("sleeping for", str(frame_capture_delay), "seconds...")
                 time.sleep(frame_capture_delay)
