@@ -22,7 +22,7 @@ label_lines = ""
 
 #   Delete any previous image masks in the masks folder
 def DeleteOldMasks():
-    files = glob.glob('OccupancyDetection/MasksCurrent/*')
+    files = glob.glob('OccupancyDetection/CroppedImages/*')
     for f in files:
         os.remove(f)
 
@@ -182,9 +182,6 @@ def CreateCroppedImages(image):
     image_original = image
     #image_overlay_result = image
 
-    #   Display image
-    cv2.imshow("image", image)
-
     for i, mask in enumerate(image_masks):
         #   Mask out the image with the mask
         image_masked = cv2.bitwise_and(image_original, image_original, mask = mask)
@@ -206,7 +203,7 @@ def CreateCroppedImages(image):
         #image_masked = cv2.resize(image_masked, (600, 600), fx=1, fy=1)
 
         #   Save image mask
-        savedImageFile = 'OccupancyDetection/MasksCurrent/mask' + str(i) + '.png'
+        savedImageFile = 'OccupancyDetection/CroppedImages/mask' + str(i) + '.png'
         cv2.imwrite(savedImageFile, image_masked)
     
     print ("Masked Images Created.")

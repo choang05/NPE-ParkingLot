@@ -319,14 +319,11 @@ def main():
                 #   Capture frame
                 isCaptureSuccess, image = capture.read()
 
-                # Display the resulting frame
-                cv2.imshow('frame',image)
-
                 #   if image capture is sucessful... 
                 if isCaptureSuccess:
                     #   Create the result from capture image
                     CreateResults(image)
-
+                    break
             else:
                 print('Could not connect to', camera[1])
                     # print(camera_tuple[1])
@@ -334,8 +331,8 @@ def main():
             #     for plate in slot['validPlates']:
             #         print (plate['plate'])
 
-        print("sleeping for", str(frame_capture_delay), "seconds...")
-        time.sleep(frame_capture_delay)
+        #print("sleeping for", str(frame_capture_delay), "seconds...")
+        #time.sleep(frame_capture_delay)
         #for index, imagePath in enumerate(image_files):
         #    image = cv2.imread(imagePath)
         #    thread = threading.Thread(target=CreateResults, args=(image,))
