@@ -39,11 +39,23 @@ def DeleteOldMasks():
 
 #   Fetch mask images and convert to array of cv2 image data
 def SetupMasks(maskImagesPath):
+    global image_mask_files
+    global image_masks
+
+    print("Setting up masks path at", maskImagesPath + "...")
+
+    #   Clean
+    image_mask_files = []
+    image_masks = []
+
+    #   Append each filepath to images
     for filename in glob.glob(maskImagesPath):
         image_mask_files.append(filename)
 
+    #   Sort numerically
     sort_nicely(image_mask_files)
 
+    #   Append cv2.imread of image filepaths
     for image in image_mask_files:
         image_masks.append(cv2.imread(image, 0))
     
@@ -173,7 +185,9 @@ def Predict(image):
 
 #   Given an image, create the masked version from each image mask
 def CreateCroppedImages(image):
-    print ("Creating Masked Images...")
+    print ("Creating cropped images from masks...")
+
+    global image_masks
 
     #   Adjust mask to correct size
     #image = cv2.resize(image, (1280, 720), fx=1, fy=1)
@@ -209,7 +223,7 @@ def CreateCroppedImages(image):
     print ("Masked Images Created.")
 
 #   Returns a overlay image showing validity colors and info
-def CreateOverlay(image, slots, licensePlateOutputs):
+def CreateOverlay(image, camera, licensePlateOutputs):
     print ("Creating Overlay...")
 
     #   Create threads
@@ -237,11 +251,14 @@ def CreateOverlay(image, slots, licensePlateOutputs):
 
         #   Create seperate image data for modification
         image_overlay = image_overlay_result
-        
+                    
+        #   DELETE
+        #camera_tuple = (camera['id'], camera['ipAddress'], camera['slots'], False)
+
         #result_score = 0
-        slot_id = slots[i][0]
-        slot_valid_plate = slots [i][1]
-        slot_isValid = slots [i][2]
+        slot_id = camera[2][i]['id']
+        slot_valid_plate = camera[2][i]['validPlates'][0]
+        slot_isValid = camera[2][i]['isValid']
 
         #   if no license plates were found...
         #print(licensePlateOutputs)

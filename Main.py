@@ -44,10 +44,11 @@ cropped_images_path = None
 labels_text_path = None
 graph_path = None
 post_request_url = None
+similarity_score_threshold = None
 
-#   Variables
+#   Global Variables
 cameras = []
-slots = []
+#slots = []
 capture = None
 
 ##  Image stuff
@@ -58,6 +59,44 @@ frameCounter = 0
 ##
 ##   Functions
 ##    
+#   Parse the config file and evaluate
+def InitializeConfig():
+    print("Initializing config...")
+
+    config = SafeConfigParser()
+    config.read(CONFIG_FILE_PATH)
+
+    #   Create references to globals
+    global mode
+    global frame_capture_delay
+    global video_capture_source
+    global images_path
+    global results_save_path
+    global result_image_size
+    #global video_stream_address
+    global mask_images_path
+    global cropped_images_path
+    global labels_text_path
+    global graph_path
+    global post_request_url
+    global similarity_score_threshold
+
+    #   Assign variables from config
+    #   Main Settings
+    mode = Modes(config.getint("Settings", "mode"))
+    frame_capture_delay = config.getint("Settings", "frame_capture_delay")
+    video_capture_source = config.get("Settings", "video_capture_source")
+    images_path = config.get("Settings", "images_path")
+    results_save_path = config.get("Settings", "results_save_path")
+    result_image_size = [int(i) for i in config.get("Settings", "result_image_size").split(',')] #   List from config returns strings so it needs to be converted to list of ints
+    #video_stream_address = config.get("Settings", "video_stream_address")
+    mask_images_path = config.get("Settings", "mask_images_path")
+    cropped_images_path = config.get("Settings", "cropped_images_path")
+    labels_text_path = config.get("Settings", "labels_text_path")
+    graph_path = config.get("Settings", "graph_path")
+    post_request_url = config.get("Settings", "post_request_url")
+    similarity_score_threshold = config.getfloat("Settings", "similarity_score_threshold")
+
 def DeleteResultFiles():
     global results_save_path
 
@@ -76,9 +115,9 @@ def InitializeSlotsData():
             # print(camera_tuple[1])
             # for slot in camera_tuple[2]:
             #     for plate in slot['validPlates']:
-            #         print (plate['plate'])
+            #         print (plate)
 
-            #   Append tuple to array of slots
+            #   Append tuple to array of cameras
             cameras.append(camera_tuple)
 
     #slot_tuple = (camera['id'], camera['ipAddress'], False)
@@ -92,56 +131,25 @@ def SetupImagesPath(ImagesPath):
     #   Sort
     #sort_nicely(image_files)
 
-#def tryint(s):
-#    try:
-#        return int(s)
-#    except:
-#        return s
-
-#def alphanum_key(s):
-#    """ Turn a string into a list of string and number chunks.
-#        "z23a" -> ["z", 23, "a"]
-#    """
-#    return [ tryint(c) for c in re.split('([0-9]+)', s) ]
-
-#def sort_nicely(l):
-#    """ Sort the given list in the way that humans expect.
-#    """
-#    l.sort(key=alphanum_key)
-
-#   Returns true if the given license plate strings match the one allowed in the parking slot
-def GetParkingSlotValidity(slot_tuple, license_plates_to_check):
-    ''' Returns a tuple of each parking slot ID and their validity status  '''
-
-    if len(license_plates_to_check) <= 0:
-        return False
-
-    #print (slot_tuple[1])
-    #print (license_plates_to_check)
-
-    #   loop through plates and check if there is a similarity between the detected plate and the valid plate. If so, return true, else return false
-    for index, plate in enumerate(license_plates_to_check):
-        if GetStringSimilarity(slot_tuple[1], plate) >= 0.60:
-            print("Plate is valid: " + slot_tuple[1] + "(valid plate)" + " and " + plate + "(detected)")
-            return True
-    print("Plate is NOT valid: " + plate + "(valid plate)")
-    return False
-
-#   Given two strings, return a similarity percentage between them in decimal points (0.6, 0.0, 1.0, etc.)
-def GetStringSimilarity(str1, str2):
-    return SequenceMatcher(None, str1, str2).ratio()
-
 #   Create parking slot validy result
-def CreateResults(image):
+def ProcessCameraImage(camera_tuple, image):
     global frameCounter
     global result_image_size
+    global mask_images_path
     global cropped_images_path
+    global cameras
 
     #   Start timer
     elapsed_time = time.time()
 
     #   Resize
     #image = cv2.resize(image, (1280, 720), fx=1, fy=1) 
+
+    #   Initialize occupancy detection
+    DeleteOldMasks()
+    #   Construct mask path and setup using camera ID
+    maskFilePath = mask_images_path + camera_tuple[0] + "/*.jpg"
+    SetupMasks(maskFilePath)
 
     #   (OccupancyDetection.py)
     CreateCroppedImages(image)
@@ -162,31 +170,31 @@ def CreateResults(image):
         license_plates.append(output)
 
         #   Get the slot validity 
-        isValid = GetParkingSlotValidity(slots[i], output)
+        isValid = GetParkingSlotValidity(camera_tuple[2][i], output)
 
         #   Update the slot validity
-        temp_list = list(slots[i])
-        temp_list[2] = isValid
-        slots[i] = tuple(temp_list)
+        temp_list = list(camera_tuple)
+        temp_list[2][i]['isValid'] = isValid
+        camera_tuple = tuple(temp_list)
 
-    print(slots)
+    #print(slots)
     #print(license_plates)
 
     #   Create overlay
-    #image_result = CreateOverlay(image, slots, license_plates)
+    image_result = CreateOverlay(image, camera_tuple, license_plates)
 
     #   Shrink image so it takes less space
-    ##image_result = cv2.resize(image_result, (result_image_size[0], result_image_size[1]), fx=1, fy=1)
+    image_result = cv2.resize(image_result, (result_image_size[0], result_image_size[1]), fx=1, fy=1)
     
     #   Determine if directory exists
-    #if not os.path.exists(results_save_path):
-    #    print(results_save_path, "doesn't exist! Creating new directory...")
-    #    os.makedirs(results_save_path)
+    if not os.path.exists(results_save_path):
+        print(results_save_path, "doesn't exist! Creating new directory...")
+        os.makedirs(results_save_path)
 
     #   save it to file
-    #filename = str(frameCounter) + ".jpg"
-    #cv2.imwrite(results_save_path + filename, image_result)
-    #print(filename, "saved to", results_save_path)
+    filename = camera_tuple[0] + "_" + str(frameCounter) + ".jpg"
+    cv2.imwrite(results_save_path + filename, image_result)
+    print(filename, "saved to", results_save_path)
 
     #   Increase file counter
     frameCounter += 1
@@ -212,42 +220,49 @@ def CreateResults(image):
 
     print("Thread time:", time.time() - elapsed_time)
 
-#   Parse the config file and evaluate
-def InitializeConfig():
-    print("Initializing config...")
+#def tryint(s):
+#    try:
+#        return int(s)
+#    except:
+#        return s
 
-    config = SafeConfigParser()
-    config.read(CONFIG_FILE_PATH)
+#def alphanum_key(s):
+#    """ Turn a string into a list of string and number chunks.
+#        "z23a" -> ["z", 23, "a"]
+#    """
+#    return [ tryint(c) for c in re.split('([0-9]+)', s) ]
 
-    #   Create references to globals
-    global mode
-    global frame_capture_delay
-    global video_capture_source
-    global images_path
-    global results_save_path
-    global result_image_size
-    #global video_stream_address
-    global mask_images_path
-    global cropped_images_path
-    global labels_text_path
-    global graph_path
-    global post_request_url
+#def sort_nicely(l):
+#    """ Sort the given list in the way that humans expect.
+#    """
+#    l.sort(key=alphanum_key)
 
-    #   Assign variables from config
-    #   Main Settings
-    mode = Modes(config.getint("Settings", "mode"))
-    frame_capture_delay = config.getint("Settings", "frame_capture_delay")
-    video_capture_source = config.get("Settings", "video_capture_source")
-    images_path = config.get("Settings", "images_path")
-    results_save_path = config.get("Settings", "results_save_path")
-    result_image_size = [int(i) for i in config.get("Settings", "result_image_size").split(',')] #   List from config returns strings so it needs to be converted to list of ints
-    #video_stream_address = config.get("Settings", "video_stream_address")
-    mask_images_path = config.get("Settings", "mask_images_path")
-    cropped_images_path = config.get("Settings", "cropped_images_path")
-    labels_text_path = config.get("Settings", "labels_text_path")
-    graph_path = config.get("Settings", "graph_path")
-    post_request_url = config.get("Settings", "post_request_url")
+#   Returns true if the given license plate strings matches any of the allowed plates in the parking slot
+def GetParkingSlotValidity(slot_tuple, license_plates_to_check):
+    ''' Returns a tuple of each parking slot ID and their validity status  '''
 
+    global similarity_score_threshold
+
+    #   return false if there was no license plates to check
+    if len(license_plates_to_check) <= 0:
+        print("No plates found to validate.")
+        return False
+
+    #print (slot_tuple['validPlates'][0])
+    #print (license_plates_to_check)
+
+    #   loop through plates and check if there is a similarity between the detected plate and the valid plate. If so, return true, else return false
+    for i, plate in enumerate(license_plates_to_check):
+        if GetStringSimilarity(slot_tuple['validPlates'][0], plate) >= similarity_score_threshold:
+            print("Plate is valid: " + slot_tuple['validPlates'][0] + "(valid plate)" + " and " + plate + "(detected)")
+            return True
+
+    print("Plate is NOT valid: " + plate + "(valid plate)")
+    return False
+
+#   Given two strings, return a similarity percentage between them in decimal points (0.6, 0.0, 1.0, etc.)
+def GetStringSimilarity(str1, str2):
+    return SequenceMatcher(None, str1, str2).ratio()
 
 ##
 ##   Main
@@ -272,9 +287,7 @@ def main():
     DeleteResultFiles()
     InitializeSlotsData()
 
-    #   Initialize occupancy detection
-    DeleteOldMasks()
-    SetupMasks(mask_images_path)
+
     #SetupTensorflow(labels_text_path, graph_path)
 
     #print ("testing test")
@@ -311,7 +324,11 @@ def main():
             print('Attempting to connect to camera', camera[0], 'at IP address:', camera[1] + '...')
 
             #   set capture source of ip address of camera
-            capture = cv2.VideoCapture(camera[1])
+            #capture = cv2.VideoCapture(camera[1])
+            if camera[0] == "C1":
+                capture = cv2.VideoCapture("C:/Users/chadh/Desktop/20180306_125655.JPG") #   Debugging purposes
+            else:
+                capture = cv2.VideoCapture("C:/Users/chadh/Desktop/2018.03.06.12.56.37.247.jpg") #   Debugging purposes
 
             # Check if camera opened successfully
             if (capture.isOpened() == True):
@@ -322,24 +339,25 @@ def main():
                 #   if image capture is sucessful... 
                 if isCaptureSuccess:
                     #   Create the result from capture image
-                    CreateResults(image)
-                    break
+                    ProcessCameraImage(camera, image)
             else:
                 print('Could not connect to', camera[1])
                     # print(camera_tuple[1])
             # for slot in camera_tuple[2]:
             #     for plate in slot['validPlates']:
             #         print (plate['plate'])
+        
+        #   Sleep
+        print("sleeping for", str(frame_capture_delay), "seconds...")
+        time.sleep(frame_capture_delay)
 
-        #print("sleeping for", str(frame_capture_delay), "seconds...")
-        #time.sleep(frame_capture_delay)
         #for index, imagePath in enumerate(image_files):
         #    image = cv2.imread(imagePath)
-        #    thread = threading.Thread(target=CreateResults, args=(image,))
+        #    thread = threading.Thread(target=ProcessCameraImage, args=(image,))
         #    thread.start()
 
         #image2 = cv2.imread(image_files[1]) 
-        #thread2 = threading.Thread(target=CreateResults, args=(image2,))
+        #thread2 = threading.Thread(target=ProcessCameraImage, args=(image2,))
 
         #thread1.start()
         #thread2.start()
@@ -417,39 +435,51 @@ def main():
     elif mode == Modes.Stream: 
         #   cache capture source
         #capture = cv2.VideoCapture(video_stream_address)
-        capture = None
         # Check if camera opened successfully
-        if (capture.isOpened() == True):
-            nexttime = time.time()
+        while(True):
+            #   Start timer
+            elapsed_time = time.time()
 
-            while(True):
-                #   Capture frame-by-frame
-                isCaptureSuccess, image = capture.read()
+            SetupImagesPath(images_path)
 
-                #   if image capture is sucessful... 
-                if isCaptureSuccess:
-                    #   Display capture image
-                    #cv2.imshow('frame' + str(frameCounter), image)
-                    #   Create the result from capture image
-                    CreateResults(image)
+            #   for each camera...
+            for camera in cameras:
 
-                    #   [BUG] if you do not recache the capture after X iterations, it crashes due to an issue with ffmpeg failing to decode stream.
-                    if frameCounter % 25 == 0:
-                        print("Recaching capture...")
-                        #capture = cv2.VideoCapture(video_stream_address)
-                        capture = None
-                    print("sleeping for", str(frame_capture_delay), "seconds...")
-                    time.sleep(frame_capture_delay)
+                print('Attempting to connect to camera', camera[0], 'at IP address:', camera[1] + '...')
 
+                #   set capture source of ip address of camera
+                #capture = cv2.VideoCapture(camera[1])
+                if camera[0] == "C1":
+                    capture = cv2.VideoCapture("C:/Users/chadh/Desktop/20180306_125655.JPG") #   Debugging purposes
                 else:
-                    print ("Unable to retrieve image from capture!")
+                    capture = cv2.VideoCapture("C:/Users/chadh/Desktop/2018.03.06.12.56.37.247.jpg") #   Debugging purposes
 
-                if cv2.waitKey(25) & 0xFF == ord('q'):
-                    capture.release()
+                # Check if camera opened successfully
+                if (capture.isOpened() == True):
+                    print('Connected!')
+                    #   Capture frame
+                    isCaptureSuccess, image = capture.read()
+
+                    #   if image capture is sucessful... 
+                    if isCaptureSuccess:
+                        #   Create the result from capture image
+                        ProcessCameraImage(camera, image)
+                else:
+                    print('Could not connect to', camera[1])
                     break
-        else:
-            print("Unable to read capture source! Trying again in ", str(frame_capture_delay))
+                        # print(camera_tuple[1])
+                # for slot in camera_tuple[2]:
+                #     for plate in slot['validPlates']:
+                #         print (plate['plate'])
+        
+            #   Sleep
+            print("sleeping for", str(frame_capture_delay), "seconds...")
             time.sleep(frame_capture_delay)
+
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                capture.release()
+                break
+            
 
     # Call when completely done to release memory
     #alpr.unload()

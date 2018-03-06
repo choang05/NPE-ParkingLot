@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\LicensePlateDetection"
+    "\\LicensePlateDetection",
+    "\\OccupancyDetection"
   ],
   "SelectedNode": "\\Main.py",
   "PreviewInSolutionExplorer": false

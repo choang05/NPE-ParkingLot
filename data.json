@@ -8,19 +8,18 @@
       [
         {
           "id": "P0",
-          "validPlates":["HSK5419"]
+          "validPlates":["HSK5419"],
+          "isValid" : false
         },
         {
           "id": "P1",
-          "validPlates":["DRB7040"]
+          "validPlates":["DRB7040"],
+          "isValid" :false
         },
         {
           "id": "P2",
-          "validPlates": ["658MJM"]
-        },
-        {
-          "id": "P3",
-          "validPlates":["GBV3265"]
+          "validPlates": ["658MJM"],
+          "isValid" : false
         }
       ]
     },
@@ -31,16 +30,19 @@
       "slots": 
       [
         {
+          "id": "P3",
+          "validPlates": ["JKJ5124"],
+          "isValid" : false
+        },
+        {
           "id": "P4",
-          "validPlates": ["BVC7649"]
+          "validPlates": ["BXT4267"],
+          "isValid" : false
         },
         {
           "id": "P5",
-          "validPlates": ["BXT4267"]
-        },
-        {
-          "id": "P6",
-          "validPlates": ["JKJ5124"]
+          "validPlates": ["ZNJ33G"],
+          "isValid" : false
         }
       ]
     }
