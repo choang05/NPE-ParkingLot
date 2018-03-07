@@ -235,7 +235,7 @@ def CreateOverlay(image, camera, licensePlateOutputs):
 
     # Read the images
     image_original = image
-    image_overlay_result = image
+    #image_overlay_result = image
 
     for i, element in enumerate(image_masks):
         #   Create mask
@@ -250,7 +250,7 @@ def CreateOverlay(image, camera, licensePlateOutputs):
         im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
 
         #   Create seperate image data for modification
-        image_overlay = image_overlay_result
+        image_overlay = image_original
                     
         #   DELETE
         #camera_tuple = (camera['id'], camera['ipAddress'], camera['slots'], False)
@@ -260,19 +260,28 @@ def CreateOverlay(image, camera, licensePlateOutputs):
         slot_valid_plate = camera[2][i]['validPlates'][0]
         slot_isValid = camera[2][i]['isValid']
 
+        #   Draw rectangles...
         #   if no license plates were found...
         #print(licensePlateOutputs)
+        validityColor = (0,0,0)
         if len(licensePlateOutputs[i]) <= 0:
             slot_isValid = "Empty"
-            cv2.drawContours(image_overlay, contours,-1,(0, 150, 150), -1)
+            validityColor = (0,0,255)
+            #cv2.drawContours(image_overlay, contours,-1,(0, 150, 150), -1)
         #   else if there is a license plate but it is not a valid plate...
         elif slot_isValid == False:
             slot_isValid = "No"
-            cv2.drawContours(image_overlay, contours,-1,(0, 0, 255), -1)
+            validityColor = (0, 0, 255)
+            #cv2.drawContours(image_overlay, contours,-1,(0, 0, 255), -1)
         #   else, there is a valid license plate in the right parking slot...
         elif slot_isValid == True:
             slot_isValid = "Yes"
-            cv2.drawContours(image_overlay, contours,-1,(0,255,0), -1)
+            validityColor = (0,255,0)
+            #cv2.drawContours(image_overlay, contours,-1,(0,255,0), -1)
+
+        # apply the overlay with transparency, alpha
+        #alpha = 0.25
+        #cv2.addWeighted(image_overlay, alpha, image_original, 1 - alpha, 0, image_original)
 
         #   Calculate the moment of the contour moment to calculate center coordinates
         contour_moment = cv2.moments(contours[0])
@@ -280,7 +289,8 @@ def CreateOverlay(image, camera, licensePlateOutputs):
         centerY = int(contour_moment['m01']/contour_moment['m00'])
 
         #   Add adjustments due to text not centered
-        centerX = centerX - 200
+        centerX = centerX - 200 #   Left
+        centerY = centerY + 100 #   Down
 
         #   Text font templates
         #FONT_HERSHEY_SIMPLEX = 0,
@@ -298,17 +308,12 @@ def CreateOverlay(image, camera, licensePlateOutputs):
         font = cv2.FONT_HERSHEY_SIMPLEX
         fontSize = 1
         textThickness = 4
-        fontColor = (0,0,0)
 
         #   Create text
-        cv2.putText(image_overlay_result, "Slot: " + str(slot_id), (centerX, centerY), font, fontSize, fontColor, textThickness, cv2.LINE_AA)         
-        cv2.putText(image_overlay_result, "Valid Plate: " + slot_valid_plate, (centerX, centerY + verticalSpacing), font, fontSize, fontColor, textThickness, cv2.LINE_AA)         
-        cv2.putText(image_overlay_result, "validity: " + str(slot_isValid), (centerX, centerY + verticalSpacing * 2), font, fontSize, fontColor, textThickness, cv2.LINE_AA)            
+        cv2.putText(image_overlay, "Slot: " + str(slot_id), (centerX, centerY), font, fontSize, validityColor, textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay, "Valid Plate: " + slot_valid_plate, (centerX, centerY + verticalSpacing), font, fontSize, validityColor, textThickness, cv2.LINE_AA)         
+        cv2.putText(image_overlay, "validity: " + str(slot_isValid), (centerX, centerY + verticalSpacing * 2), font, fontSize, validityColor, textThickness, cv2.LINE_AA)            
         #cv2.putText(image_overlay_result, "Confidence: " + str(result_score)[:4 + (1-1)] + '%', (centerX, centerY + verticalSpacing * 3), font, fontSize, (0, 0, 0), textThickness, cv2.LINE_AA)          
-
-        # apply the overlay with transparency, alpha
-        alpha = 0.25
-        cv2.addWeighted(image_overlay, alpha, image_overlay_result, 1 - alpha, 0, image_overlay_result)
 
         #   Shrink main image and display
         #image_main_small = cv2.resize(image_overlay_result, (750, 750), fx=1, fy=1) 
@@ -319,7 +324,7 @@ def CreateOverlay(image, camera, licensePlateOutputs):
     
     #print ("Overlay Created")
 
-    return image_overlay_result
+    return image_original
 
 def tryint(s):
     try:

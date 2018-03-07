@@ -448,11 +448,11 @@ def main():
                 print('Attempting to connect to camera', camera[0], 'at IP address:', camera[1] + '...')
 
                 #   set capture source of ip address of camera
-                #capture = cv2.VideoCapture(camera[1])
-                if camera[0] == "C1":
-                    capture = cv2.VideoCapture("C:/Users/chadh/Desktop/20180306_125655.JPG") #   Debugging purposes
-                else:
-                    capture = cv2.VideoCapture("C:/Users/chadh/Desktop/2018.03.06.12.56.37.247.jpg") #   Debugging purposes
+                capture = cv2.VideoCapture(camera[1])
+                # if camera[0] == "C1":
+                #     capture = cv2.VideoCapture("C:/Users/chadh/Desktop/20180306_125655.JPG") #   Debugging purposes
+                # else:
+                #     capture = cv2.VideoCapture("C:/Users/chadh/Desktop/2018.03.06.12.56.37.247.jpg") #   Debugging purposes
 
                 # Check if camera opened successfully
                 if (capture.isOpened() == True):
