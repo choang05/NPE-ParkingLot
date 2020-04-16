@@ -22,18 +22,18 @@
 - **RFID tags and readers**
   - **Idea 1**
     - RFID tags can be used to send data back and forth when in proximity of a RFID reader that is embedded into the concrete. Client drives up into the parking spot where the RFID will trigger the reader and data will be evaluated. This is a very convenient for the client as all they need to do is keep the RFID tag in their car just like an EZ tag. However, this system is very expensive as each parking spot requires a UHF RFID reader.
-
-![](RackMultipart20200416-4-n5pphd_html_832af0d90a8c5d27.gif)
+    
+![Image](https://i.imgur.com/av9W1Ft.png)
 
   - **Idea 2**
     - To reduce the overall cost, we can station a lower frequency RFID reader station at each parking spot where the vehicle driver must scan their card to register their parking spot after they have parked. Although this significantly reduces RFID reader cost, it becomes a inconvenience for the client driver since they would need to manually scan their RFID tags.
 
-![](RackMultipart20200416-4-n5pphd_html_22e6d6d20b76c179.gif)
+![](https://i.imgur.com/984tJqW.png)
 
   - **Idea 3 (unresearched)**
     - A possibility of reducing overall cost as well as reducing the need for readers at each parking spot would be to place multiple UHF RFID readers in strategic locations where a RFID tag inside the vehicle can be triangulated between multiple readers to determine a 3 dimensional position that can be evaluated by the system to check if which parking spots are being used and where that RFID tag is.
 
-![](RackMultipart20200416-4-n5pphd_html_ec976ced7bf602ef.gif)
+![](https://i.imgur.com/1EYbrJ1.png)
 
   - **Hardware** :
     - Microprocessor
@@ -66,7 +66,7 @@
   - **Idea**
     - With the use of computer vision software and possibly neural networks such as _OpenCV_ and _TensorFlow_, we can use cameras tied to each parking slot take pictures of the license when a is within proximity. The image recognition algorithm will convert the license plate into characters that can be evaluated with the valid license plates in the database. Camera processing can be done by server or locally.
 
-![](RackMultipart20200416-4-n5pphd_html_492326400bdae326.gif)
+![](https://i.imgur.com/WYr26Qb.png)
 
   - **Pros**
     - Setup difficulty may vary
