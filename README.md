@@ -3,6 +3,12 @@
 - Create a logistic system for car parking lots so residents can have designated parking spot based on personal verification.
 - The system will utilize a network of RFID readers to detect vehicles and communicate with car tags. A progressive web application (PWA) will be used to coordinate, detect and assign currently parked cars to specific parking locations.
 
+**Demos & Samples**
+
+[![](http://img.youtube.com/vi/l6gmTWmQlwI/0.jpg)](http://www.youtube.com/watch?v=l6gmTWmQlwI)
+[![](http://img.youtube.com/vi/rWy45KLwwIY/0.jpg)](http://www.youtube.com/watch?v=rWy45KLwwIY)
+[![](http://img.youtube.com/vi/Y9wX2qvcdKI/0.jpg)](http://www.youtube.com/watch?v=Y9wX2qvcdKI)
+
 **Challenges:**
 
 - Creating a network of RFID readers to communicate with a web application
